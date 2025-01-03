@@ -1,0 +1,134 @@
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f2f2f2;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 회원가입 컨테이너 */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.signup-box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* 최대 너비를 설정해줍니다 */
+    text-align: center;
+}
+
+/* 헤더 스타일 */
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* 기본 텍스트박스 스타일 */
+.textbox {
+    margin-bottom: 10px;
+}
+
+.textbox input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+
+/* 회원가입 버튼 */
+.btn-signup {
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-signup:hover {
+    background-color: #45a049;
+}
+
+/* 반응형 디자인 (모바일 화면) */
+@media (max-width: 768px) {
+    .signup-box {
+        padding: 20px;
+        width: 90%;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    .textbox input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .email-group input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .email-group .btn-check {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .btn-signup {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-box {
+        padding: 15px;
+        width: 95%;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .textbox input {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .email-group input {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .email-group .btn-check {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .btn-signup {
+        font-size: 14px;
+        padding: 8px;
+    }
+}

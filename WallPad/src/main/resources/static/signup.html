@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입 페이지</title>
+<link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+	<div class="signup-container">
+		<div class="signup-box">
+			<h2>회원가입</h2>
+			<form action="/users/insert" id="signupForm" method="POST">
+				<div class="textbox">
+					<input type="text" placeholder="아이디" name="username" id="username" required>
+				</div>
+				<p id="idStatus"></p> <!-- 중복 여부 메시지 출력 -->
+				<div class="textbox">
+					<input type="password" placeholder="비밀번호" name="password" required>
+				</div>
+				<div class="textbox">
+					<input type="text" placeholder="성함" name="name" required>
+				</div>
+				<div class="textbox">
+					<input type="text" placeholder="성별" name="gender" required>
+				</div>
+				<div class="textbox">
+					<input type="text" placeholder="전화번호를 ' - ' 빼고 입력" name="phone_num"
+						required>
+				</div>
+				<div class="textbox">
+					<input type="email" placeholder="이메일" name="email" id="email" required>
+				</div>
+				<p id="emailStatus"></p>
+				<input type="submit" value="회원가입" class="btn-signup">
+				<div class="login-link">
+					<p>
+						이미 계정이 있으신가요? <a href="/user/login">로그인</a>
+					</p>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="js/signup.js"></script>
+</body>
+</html>
