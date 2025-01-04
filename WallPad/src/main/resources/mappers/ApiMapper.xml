@@ -3,47 +3,56 @@
 
 <mapper namespace="com.wallpad.project.mapper.ApiMapper">
 
-     <!-- 아이디 중복 체크 -->
-    <select id="userNameCheck" resultType="int">
-        SELECT COUNT(*) FROM users WHERE username = #{username}
-    </select>
+	<!-- 아이디 중복 체크 -->
+	<select id="userNameCheck" resultType="int">
+		SELECT COUNT(*) FROM users
+		WHERE username = #{username}
+	</select>
 
-    <!-- 이메일 중복 체크 -->
-    <select id="emailCheck" resultType="int">
-        SELECT COUNT(*) FROM users WHERE email = #{email}
-    </select>
+	<!-- 이메일 중복 체크 -->
+	<select id="emailCheck" resultType="int">
+		SELECT COUNT(*) FROM users
+		WHERE email = #{email}
+	</select>
 
 
-	<insert id="saveUserData" parameterType="com.wallpad.project.dto.SignUpDTO">
+	<insert id="saveUserData"
+		parameterType="com.wallpad.project.dto.SignUpDTO">
 		INSERT INTO users
-			(
-				username
-				,password
-				,name
-				,gender
-				,phone_num
-				,email
-			)
+		(
+		username
+		,password
+		,name
+		,gender
+		,phone_num
+		,email
+		)
 		VALUES
-			(
-				#{username}
-				,#{password}
-				,#{name}
-				,#{gender}
-				,#{phone_num}
-				,#{email}
-			)
+		(
+		#{username}
+		,#{password}
+		,#{name}
+		,#{gender}
+		,#{phone_num}
+		,#{email}
+		)
 	</insert>
-	
-	
-	    <!-- 이메일 인증 상태 업데이트 -->
-    <update id="updateEmailVerified" parameterType="String">
-        UPDATE users
-        SET email_verified = TRUE  
-        WHERE email = #{email} 
-    </update>
 
 
+	<!-- 이메일 인증 상태 업데이트 -->
+	<update id="updateEmailVerified" parameterType="String">
+		UPDATE users
+		SET
+		email_verified = TRUE
+		WHERE email = #{email}
+	</update>
+
+	<select id="findByUsername" parameterType="String"
+		resultType="com.wallpad.project.dto.UserDTO">
+		SELECT username, password, name, gender, phone_num, email
+		FROM users
+		WHERE username = #{username}
+	</select>
 
 
 </mapper>

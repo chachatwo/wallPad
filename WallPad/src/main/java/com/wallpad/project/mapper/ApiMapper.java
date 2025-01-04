@@ -2,8 +2,8 @@ package com.wallpad.project.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.wallpad.project.dto.IdCheckDTO;
 import com.wallpad.project.dto.SignUpDTO;
+import com.wallpad.project.dto.UserDTO;
 
 @Mapper
 public interface ApiMapper {
@@ -16,9 +16,5 @@ public interface ApiMapper {
 	
 	int emailCheck(String email);
 	
-	
-	
-	
-	
-	
+	 UserDTO findByUsername(String username);
 }
