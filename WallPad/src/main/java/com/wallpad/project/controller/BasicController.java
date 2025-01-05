@@ -21,9 +21,9 @@ public class BasicController {
 	}
 
 	@GetMapping("/")
-	public String main() {
+	public String dashboard() {
 
-		return "main.html";
+		return "dashboard.html";
 	}
 
 	@GetMapping("/login")
@@ -32,9 +32,15 @@ public class BasicController {
 		return "login.html";
 	}
 
-	@GetMapping("/main")
-	public String main2() {
+	@GetMapping("/dashboard")
+	public String dashboard2() {
 
-		return "main.html";
+		return "dashboard.html";
+	}
+	
+	@GetMapping("/notices")
+	public String notices() {
+
+		return "notices.html";
 	}
 }

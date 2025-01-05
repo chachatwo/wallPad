@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대시보드</title>
+<link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+	<div class="dashboard-container">
+		<!-- 1열 -->
+		<div class="column column-left">
+			<!-- 날짜, 날씨, 미세먼지 -->
+			<div class="dashboard-widget date-widget">
+				<h2>오늘 날짜</h2>
+				<p id="currentDate">2025-01-05</p>
+			</div>
+			<div class="dashboard-widget weather-widget">
+				<h2>오늘 날씨</h2>
+				<p id="weather">맑음</p>
+				<p id="temperature">23°C</p>
+			</div>
+			<div class="dashboard-widget air-quality-widget">
+				<h2>오늘의 미세먼지</h2>
+				<p id="airQuality">좋음</p>
+			</div>
+		</div>
+
+		<!-- 2열 -->
+		<div class="column column-middle">
+			<!-- 1행: 최신 공지사항 -->
+			<div class="dashboard-widget notices-widget">
+				<h2>최신 공지사항</h2>
+				<ul id="notices">
+					<li>공지사항 1</li>
+					<li>공지사항 2</li>
+					<li>공지사항 3</li>
+				</ul>
+			</div>
+			<!-- 2행: 유지보수 스케줄 -->
+			<div class="dashboard-widget maintenance-schedule-widget">
+				<h2>유지보수 스케줄</h2>
+				<ul id="maintenance-schedule">
+					<li>유지보수 일정 1</li>
+					<li>유지보수 일정 2</li>
+				</ul>
+			</div>
+			<!-- 3행: 최신 메시지 -->
+			<div class="dashboard-widget messages-widget">
+				<h2>최신 메시지</h2>
+				<ul id="messages">
+					<li>메시지 1</li>
+					<li>메시지 2</li>
+				</ul>
+			</div>
+			<!-- 4행: 차량 방문 예약 현황 -->
+			<div class="dashboard-widget vehicle-reservation-widget">
+				<h2>차량 방문 예약 현황</h2>
+				<p id="vehicleReservationCount">예약된 차량 수: 5</p>
+				<button class="action-button"
+					onclick="window.location.href='/vehicle/reservations';">상세보기</button>
+			</div>
+		</div>
+
+		<!-- 3열 -->
+		<div class="column column-right">
+			<div class="dashboard-widget button-widget">
+				<button id="goNotices" class="action-button">공지사항</button>
+			</div>
+			<div class="dashboard-widget button-widget">
+				<button id="goMaintenance" class="action-button">유지보수 스케쥴</button>
+			</div>
+			<div class="dashboard-widget button-widget">
+				<button id="goMessages" class="action-button">메시지함</button>
+			</div>
+			<div class="dashboard-widget button-widget">
+				<button id="goParking" class="action-button">주차관제</button>
+			</div>
+		</div>
+	</div>
+
+	<script src="script.js"></script>
+</body>
+</html>
