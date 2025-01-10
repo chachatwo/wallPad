@@ -1,11 +1,12 @@
 package com.wallpad.project.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
 
-import com.wallpad.project.dto.SignUpDTO;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.service.ApiService;
 
 import lombok.RequiredArgsConstructor;
@@ -13,34 +14,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 public class BasicController {
+	private final ApiService apiService;
 
 	@GetMapping("/signup")
-	public String signup() {
-
-		return "signup.html";
+	public String signup(Model model) {
+		return "signup";
 	}
 
 	@GetMapping("/")
-	public String dashboard() {
+	public String dashboard(Model model) {
 
-		return "dashboard.html";
+		return "dashboard";
 	}
 
 	@GetMapping("/login")
-	public String login() {
-
-		return "login.html";
+	public String Login(Model model) {
+		return "login";
 	}
 
 	@GetMapping("/dashboard")
-	public String dashboard2() {
+	public String dashboard2(Model model) {
 
-		return "dashboard.html";
+		return "dashboard";
 	}
-	
+
 	@GetMapping("/notices")
-	public String notices() {
+	public String getNotices(Model model) {
+		List<NoticeDTO> notices = apiService.findAllNotices();
+		model.addAttribute("notices", notices);
 
-		return "notices.html";
+		return "notices";
 	}
+
 }

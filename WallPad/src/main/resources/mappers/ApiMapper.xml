@@ -54,5 +54,10 @@
 		WHERE username = #{username}
 	</select>
 
+	<select id="findAllNotices"
+		resultType="com.wallpad.project.dto.NoticeDTO">
+		SELECT id, title, content, createdAt, createdBy
+		FROM notices
+	</select>
 
 </mapper>

@@ -1,10 +1,14 @@
 package com.wallpad.project.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.mapper.ApiMapper;
 
@@ -34,5 +38,17 @@ public class ApiService {
 		int count = apiMapper.emailCheck(email);
 		return count == 0; 
 	}
+	
+    public List<NoticeDTO> findAllNotices() {
+        List<NoticeDTO> notices = apiMapper.findAllNotices();
+        
+        // 날짜 포맷 처리
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for (NoticeDTO notice : notices) {
+            String formattedDate = notice.getCreatedAt().format(formatter);
+            notice.setFormattedCreatedAt(formattedDate);
+        }
 
+        return notices;
+    }
 }
