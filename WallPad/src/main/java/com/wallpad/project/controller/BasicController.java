@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.service.ApiService;
 
@@ -44,6 +45,19 @@ public class BasicController {
 		model.addAttribute("notices", notices);
 
 		return "notices";
+	}
+
+	@GetMapping("/schedule")
+	public String schedule(Model model) {
+
+		List<MaintenanceScheduleDTO> schedules = apiService.maintenanceSchedules();
+		System.out.println(schedules.get(0).getTitle());
+		System.out.println(schedules.get(1).getTitle());
+		System.out.println(schedules.get(0).getStartTime());
+		System.out.println(schedules.get(1).getStartTime());
+		model.addAttribute("schedules", schedules);
+
+		return "schedule";
 	}
 
 }

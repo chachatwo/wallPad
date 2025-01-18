@@ -1,13 +1,12 @@
 package com.wallpad.project.service;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.mapper.ApiMapper;
@@ -51,4 +50,12 @@ public class ApiService {
 
         return notices;
     }
+    
+    
+    public List<MaintenanceScheduleDTO> maintenanceSchedules() {
+        return apiMapper.maintenanceSchedules();
+    }
+    
+    
+    
 }

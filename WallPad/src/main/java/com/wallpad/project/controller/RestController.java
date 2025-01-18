@@ -1,5 +1,7 @@
 package com.wallpad.project.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.service.ApiService;
 import com.wallpad.project.service.AuthService;
@@ -20,8 +23,8 @@ public class RestController {
 	private final ApiService apiService;
 	private final AuthService authService;
 
-	@Value("${jwt.secret}") 
-	private String secretKey; 
+	@Value("${jwt.secret}")
+	private String secretKey;
 
 	@GetMapping("/check-username")
 	public String checkUsername(@RequestParam String username) {
@@ -69,15 +72,21 @@ public class RestController {
 		// 토큰 유효성 검증
 		if (authService.validateToken(token)) {
 
-			String email = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject(); 
+			String email = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
 
 			authService.updateEmailVerified(email);
 			redirectView.setUrl("/login");
 		} else {
-			redirectView.setUrl("/error"); 
+			redirectView.setUrl("/error");
 		}
 
 		return redirectView;
 	}
-	
+
+	@GetMapping("/api/schedules")
+	public List<MaintenanceScheduleDTO> getSchedules() {
+		List<MaintenanceScheduleDTO> schedules = apiService.maintenanceSchedules();
+		return schedules;
+	}
+
 }

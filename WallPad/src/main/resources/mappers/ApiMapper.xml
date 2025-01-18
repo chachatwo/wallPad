@@ -60,4 +60,19 @@
 		FROM notices
 	</select>
 
+
+	<select id="maintenanceSchedules"
+		resultType="com.wallpad.project.dto.MaintenanceScheduleDTO">
+		SELECT
+		maintenance_date AS maintenanceDate,  
+		start_time AS startTime,              
+		end_time AS endTime,                
+		title,
+		description,
+		status
+		FROM maintenance_schedule
+		WHERE maintenance_date >= CURDATE()
+		ORDER BY maintenance_date ASC;
+	</select>
+
 </mapper>

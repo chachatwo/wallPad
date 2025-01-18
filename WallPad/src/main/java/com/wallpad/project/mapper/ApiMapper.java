@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.dto.UserDTO;
@@ -22,4 +23,7 @@ public interface ApiMapper {
 	UserDTO findByUsername(String username);
 
 	List<NoticeDTO> findAllNotices();
+	
+	List<MaintenanceScheduleDTO> maintenanceSchedules();
+	
 }
