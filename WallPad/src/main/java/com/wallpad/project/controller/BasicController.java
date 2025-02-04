@@ -51,13 +51,21 @@ public class BasicController {
 	public String schedule(Model model) {
 
 		List<MaintenanceScheduleDTO> schedules = apiService.maintenanceSchedules();
-		System.out.println(schedules.get(0).getTitle());
-		System.out.println(schedules.get(1).getTitle());
-		System.out.println(schedules.get(0).getStartTime());
-		System.out.println(schedules.get(1).getStartTime());
 		model.addAttribute("schedules", schedules);
 
 		return "schedule";
+	}
+	
+	@GetMapping("/repair2")
+	public String repair2(Model model) {
+
+		return "test";
+	}
+	
+	@GetMapping("/repair")
+	public String repair(Model model) {
+
+		return "repair";
 	}
 
 }

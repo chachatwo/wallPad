@@ -1,5 +1,7 @@
 package com.wallpad.project.controller;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -7,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
+import com.wallpad.project.dto.RepairRequestDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.service.ApiService;
 import com.wallpad.project.service.AuthService;
@@ -25,6 +29,9 @@ public class RestController {
 
 	@Value("${jwt.secret}")
 	private String secretKey;
+
+//	@Value("${upload.dir}")
+//	private String uploadDir;
 
 	@GetMapping("/check-username")
 	public String checkUsername(@RequestParam String username) {
@@ -87,6 +94,39 @@ public class RestController {
 	public List<MaintenanceScheduleDTO> getSchedules() {
 		List<MaintenanceScheduleDTO> schedules = apiService.maintenanceSchedules();
 		return schedules;
+	}
+
+	@PostMapping("/api/repair")
+	public String submitRequest(@RequestParam("apartmentNumber") String apartmentNumber,
+			@RequestParam("majorCategory") String majorCategory, @RequestParam("middleCategory") String middleCategory,
+			@RequestParam("lastCategory") String lastCategory, @RequestParam("request") String request,
+			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads) {
+
+		System.out.println("메이저카테고리" + majorCategory);
+		System.out.println("미들카테고리" + middleCategory);
+		System.out.println("라스트카테고리" + lastCategory);
+		System.out.println("요청사항" + request);
+		System.out.println("imageUploads 배열: " + Arrays.toString(imageUploads));
+
+		if (imageUploads != null) {
+			System.out.println("이미지 업로드된 파일 개수: " + imageUploads.length);
+			for (MultipartFile file : imageUploads) {
+				System.out.println("파일 이름: " + file.getOriginalFilename());
+			}
+		} else {
+			System.out.println("이미지 업로드가 없습니다.");
+		}
+
+		RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
+		repairRequestDTO.setApartmentNumber(apartmentNumber);
+		repairRequestDTO.setMajorCategory(majorCategory);
+		repairRequestDTO.setMiddleCategory(middleCategory);
+		repairRequestDTO.setLastCategory(lastCategory);
+		repairRequestDTO.setRequest(request);
+
+		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
+
+		return "이미지가 성공적으로 저장되었습니다.";
 	}
 
 }

@@ -64,15 +64,51 @@
 	<select id="maintenanceSchedules"
 		resultType="com.wallpad.project.dto.MaintenanceScheduleDTO">
 		SELECT
-		maintenance_date AS maintenanceDate,  
-		start_time AS startTime,              
-		end_time AS endTime,                
+		maintenance_date AS maintenanceDate,
+		start_time AS
+		startTime,
+		end_time AS endTime,
 		title,
 		description,
 		status
-		FROM maintenance_schedule
-		WHERE maintenance_date >= CURDATE()
-		ORDER BY maintenance_date ASC;
+		FROM
+		maintenance_schedule
+		WHERE maintenance_date >=
+		CURDATE()
+		ORDER BY
+		maintenance_date ASC;
 	</select>
+
+
+	<!-- 수리 요청 정보 저장 -->
+	<insert id="saveRepairRequest"
+		parameterType="com.wallpad.project.dto.RepairRequestDTO">
+		INSERT INTO repair_request (
+		apartmentNumber,
+		majorCategory, middleCategory, lastCategory, request
+		)
+		VALUES (
+		#{apartmentNumber}, #{majorCategory}, #{middleCategory},
+		#{lastCategory}, #{request}
+		)
+	</insert>
+
+	<!-- 마지막으로 삽입된 수리 요청 ID 조회 -->
+	<select id="getLastInsertedId" resultType="int">
+		SELECT
+		LAST_INSERT_ID()
+	</select>
+
+
+	<!-- 이미지 정보 저장 -->
+	<insert id="saveImage"
+		parameterType="com.wallpad.project.dto.RepairImageDTO">
+		INSERT INTO repair_image (
+		repairRequestId, imagePath
+		)
+		VALUES (
+		#{repairRequestId}, #{imagePath}
+		)
+	</insert>
 
 </mapper>

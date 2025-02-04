@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
+import com.wallpad.project.dto.RepairImageDTO;
+import com.wallpad.project.dto.RepairRequestDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.dto.UserDTO;
 
@@ -26,4 +28,9 @@ public interface ApiMapper {
 	
 	List<MaintenanceScheduleDTO> maintenanceSchedules();
 	
+	void saveRepairRequest(RepairRequestDTO repairRequestDTO);
+	
+	int getLastInsertedId();
+	
+	void saveImage(RepairImageDTO repairImageDTO);
 }
