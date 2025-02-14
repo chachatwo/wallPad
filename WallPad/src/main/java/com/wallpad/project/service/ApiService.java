@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
+import com.wallpad.project.dto.ParkingReserveDTO;
 import com.wallpad.project.dto.RepairImageDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
 import com.wallpad.project.dto.SignUpDTO;
@@ -76,7 +77,8 @@ public class ApiService {
 		if (imageUploads != null) {
 			for (MultipartFile imageUpload : imageUploads) {
 				try {
-					String imageName = UUID.randomUUID().toString().replace("-", "") + "_" + imageUpload.getOriginalFilename();
+					String imageName = UUID.randomUUID().toString().replace("-", "") + "_"
+							+ imageUpload.getOriginalFilename();
 					String imagePath = "/images/" + imageName;
 
 					File targetFile = new File(uploadDir + imageName);
@@ -94,6 +96,10 @@ public class ApiService {
 				}
 			}
 		}
+	}
+
+	public int saveParkingReserve(ParkingReserveDTO parkingReserveDTO) {
+		return apiMapper.saveParkingReserve(parkingReserveDTO);
 	}
 
 }

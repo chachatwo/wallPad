@@ -111,4 +111,11 @@
 		)
 	</insert>
 
+
+	<insert id="saveParkingReserve"
+		parameterType="com.wallpad.project.dto.ParkingReserveDTO">
+		INSERT INTO parking_reserve (carNumber, allowedPeriod)
+		VALUES (#{carNumber}, #{allowedPeriod})
+	</insert>
+
 </mapper>

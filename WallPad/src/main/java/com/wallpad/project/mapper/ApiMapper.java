@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
+import com.wallpad.project.dto.ParkingReserveDTO;
 import com.wallpad.project.dto.RepairImageDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
 import com.wallpad.project.dto.SignUpDTO;
@@ -33,4 +34,6 @@ public interface ApiMapper {
 	int getLastInsertedId();
 	
 	void saveImage(RepairImageDTO repairImageDTO);
+	
+	int saveParkingReserve(ParkingReserveDTO parkingReserveDTO);
 }
