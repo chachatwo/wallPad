@@ -112,10 +112,36 @@
 	</insert>
 
 
+	<select id="findByCarNumber" parameterType="String"
+		resultType="com.wallpad.project.dto.ParkingReserveDTO">
+		SELECT
+		carNumber, allowedPeriod
+		FROM parking_reserve
+		WHERE carNumber =
+		#{carNumber}
+	</select>
+
 	<insert id="saveParkingReserve"
 		parameterType="com.wallpad.project.dto.ParkingReserveDTO">
 		INSERT INTO parking_reserve (carNumber, allowedPeriod)
 		VALUES (#{carNumber}, #{allowedPeriod})
 	</insert>
+
+	<update id="updateParkingReserve"
+		parameterType="com.wallpad.project.dto.ParkingReserveDTO">
+		UPDATE parking_reserve
+		SET allowedPeriod =
+		#{allowedPeriod}
+		WHERE carNumber = #{carNumber}
+	</update>
+
+
+	<select id="reserveStates"
+		resultType="com.wallpad.project.dto.ReserveStatesDTO">
+		SELECT carNumber, allowedPeriod
+		FROM parking_reserve
+		WHERE
+		allowedPeriod >= CURDATE()
+	</select>
 
 </mapper>

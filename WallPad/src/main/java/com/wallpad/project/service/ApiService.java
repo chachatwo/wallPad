@@ -16,6 +16,7 @@ import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
 import com.wallpad.project.dto.RepairImageDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
+import com.wallpad.project.dto.ReserveStatesDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.mapper.ApiMapper;
 
@@ -98,8 +99,20 @@ public class ApiService {
 		}
 	}
 
+	public ParkingReserveDTO findByCarNumber(String carNumber) {
+		return apiMapper.findByCarNumber(carNumber);
+	}
+
 	public int saveParkingReserve(ParkingReserveDTO parkingReserveDTO) {
 		return apiMapper.saveParkingReserve(parkingReserveDTO);
+	}
+	
+	public int updateParkingReserve(ParkingReserveDTO parkingReserveDTO) {
+		return apiMapper.updateParkingReserve(parkingReserveDTO);
+	}
+
+	public List<ReserveStatesDTO> reserveStates() {
+		return apiMapper.reserveStates();
 	}
 
 }

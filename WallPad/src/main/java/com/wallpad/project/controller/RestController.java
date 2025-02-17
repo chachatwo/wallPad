@@ -11,9 +11,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
+import com.wallpad.project.dto.ReserveStatesDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.service.ApiService;
 import com.wallpad.project.service.AuthService;
@@ -134,6 +137,23 @@ public class RestController {
 		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
 
 		return "이미지가 성공적으로 저장되었습니다.";
+	}
+	
+	
+	@PostMapping("/api/parking/reserve/states")
+	public List<ReserveStatesDTO> reservation() {
+		List<ReserveStatesDTO> reservationList = apiService.reserveStates();
+
+		if (reservationList.isEmpty()) {
+			System.out.println("예약 목록이 비어 있습니다.");
+		} else {
+			for (int i = 0; i < reservationList.size(); i++) {
+				System.out.println("카 넘버는 :" + reservationList.get(i).getCarNumber());
+				System.out.println("출입 기간은 :" + reservationList.get(i).getAllowedPeriod());
+			}
+		}
+
+		return reservationList;
 	}
 
 }

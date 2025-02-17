@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
+import com.wallpad.project.dto.ReserveStatesDTO;
 import com.wallpad.project.service.ApiService;
 
 import lombok.RequiredArgsConstructor;
@@ -74,28 +75,31 @@ public class BasicController {
 	public String parkingReserve(@RequestParam("carNumber") String carNumber,
 			@RequestParam("allowedPeriod") int allowedPeriod, RedirectAttributes redirectAttributes) {
 
-		System.out.println("차번호 :" + carNumber);
-		System.out.println("출입기간 :" + allowedPeriod);
+		System.out.println("차량번호 : " + carNumber);
+		System.out.println("출입기간 : " + allowedPeriod);
 
 		LocalDateTime currentDateTime = LocalDateTime.now();
 
 		LocalDateTime reserveDateTime = currentDateTime.plusDays(allowedPeriod);
 
-		// 타임존 서울 기준으로 변경
 		ZonedDateTime zonedDateTime = reserveDateTime.atZone(ZoneId.of("Asia/Seoul"));
-
 		Timestamp reserveTimestamp = Timestamp.from(zonedDateTime.toInstant());
 
 		ParkingReserveDTO parkingReserveDTO = new ParkingReserveDTO();
 		parkingReserveDTO.setCarNumber(carNumber);
 		parkingReserveDTO.setAllowedPeriod(reserveTimestamp);
 
-		System.out.println("dto 저장 카넘버:" + parkingReserveDTO.getCarNumber());
-		System.out.println("dto 저장 일시:" + parkingReserveDTO.getAllowedPeriod());
+		ParkingReserveDTO existingReservation = apiService.findByCarNumber(carNumber);
 
-		apiService.saveParkingReserve(parkingReserveDTO);
-
-		redirectAttributes.addFlashAttribute("message", "예약이 완료되었습니다.");
+		if (existingReservation != null) {
+			existingReservation.setAllowedPeriod(reserveTimestamp);
+			apiService.updateParkingReserve(existingReservation);
+			redirectAttributes.addFlashAttribute("message", "기존 차량의 출입기간이 업데이트되었습니다.");
+		} else {
+			System.out.println("새 예약을 추가합니다.");
+			apiService.saveParkingReserve(parkingReserveDTO);
+			redirectAttributes.addFlashAttribute("message", "신규 차량의 예약이 완료되었습니다.");
+		}
 
 		return "redirect:/parking";
 	}
@@ -109,4 +113,5 @@ public class BasicController {
 		return "parking";
 
 	}
+
 }
