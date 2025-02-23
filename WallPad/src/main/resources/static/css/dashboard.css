@@ -1,0 +1,137 @@
+/* 기본 스타일 */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f4;
+}
+
+.dashboard-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+	padding: 20px;
+}
+
+/* 열 스타일 */
+.column {
+	display: flex;
+	flex-direction: column;
+}
+
+.column-left .dashboard-widget {
+	display: flex;
+	flex-direction: column;
+	justify-content: center; /* 수직 중앙 정렬 */
+	align-items: center; /* 수평 중앙 정렬 */
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	width: 100%; /* 위젯 너비를 100%로 설정하여 꽉 차도록 */
+}
+
+.column-left, .column-middle, .column-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* 콘텐츠가 위로 쌓이도록 설정 */
+  gap: 15px;
+}
+
+/* 각 위젯 스타일 */
+.dashboard-widget {
+	background-color: #fff;
+	padding: 15px;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-widget h2 {
+	font-size: 18px;
+	color: #333;
+	margin-bottom: 10px;
+}
+
+.dashboard-widget p, .dashboard-widget ul {
+	font-size: 14px;
+	color: #666;
+}
+
+.dashboard-widget ul {
+	list-style-type: none;
+}
+
+.dashboard-widget ul li {
+	padding: 5px 0;
+	border-bottom: 1px solid #eee;
+}
+
+/* 페이지 이동 버튼 스타일 */
+.action-button {
+	padding: 10px 15px;
+	background-color: rgb(198, 187, 198); /* 옅은 하늘색 */
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+	font-size: 14px;
+	width: 100%;
+}
+
+.action-button:hover {
+	background-color: rgb(198, 187, 198); /* 하늘색의 더 진한 색으로 hover */
+}
+
+/* 모바일에서 3열을 1열로 변경 */
+@media ( max-width : 1024px) {
+	.dashboard-container {
+		grid-template-columns: 1fr; /* 1열로 변경 */
+	}
+	.column-left, .column-middle, .column-right {
+		gap: 20px;
+	}
+	.action-button {
+		width: 100%; /* 버튼을 전체 너비로 확장 */
+	}
+}
+
+/* 화면이 더 작은 모바일에서 2열로 변경 */
+@media ( max-width : 768px) {
+	.dashboard-container {
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+}
+
+.head2 {
+	font-style: italic;
+	font-size: 12px !important;
+}
+
+#weather {
+	font-size: 30px; /* 아이콘 크기 조정 */
+}
+
+#airQuality {
+	font-size: 30px;
+}
+
+#currentDate {
+	font-size: 30px;
+}
+
+#cityName {
+	display: flex; /* 가로로 배치 */
+	align-items: center; /* 수직 중앙 정렬 */
+	font-size: 25px;
+}
+
+#locationPin {
+	margin-right: 10px; /* 이모티콘과 도시 이름 사이의 간격 조정 */
+	font-size: 20px; /* 이모티콘 크기 조정 */
+}

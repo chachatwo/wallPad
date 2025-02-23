@@ -1,0 +1,247 @@
+@charset "UTF-8";
+
+.nav-link {
+	display: block;
+	padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+	font-size: var(--bs-nav-link-font-size);
+	font-weight: var(--bs-nav-link-font-weight);
+	color: var(--bs-nav-link-color);
+	text-decoration: none;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+		border-color 0.15s ease-in-out;
+}
+
+.navbar-nav {
+	--bs-nav-link-padding-x: 0;
+	--bs-nav-link-padding-y: 0.5rem;
+	--bs-nav-link-color: var(--bs-navbar-color);
+	--bs-nav-link-hover-color: var(--bs-navbar-hover-color);
+	--bs-nav-link-disabled-color: var(--bs-navbar-disabled-color);
+	display: flex;
+	flex-direction: column;
+	padding-left: 0;
+	margin-bottom: 0;
+	list-style: none;
+}
+
+.bg-primary {
+	--bs-bg-opacity: 1;
+	background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity))
+		!important;
+	--bs-primary-rgb: 78, 115, 223;
+}
+
+#sideNav {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+#sideNav .navbar-nav .nav-item .nav-link {
+	font-weight: 800;
+	letter-spacing: 0.05rem;
+	text-transform: uppercase;
+}
+
+.navbar-dark {
+	--bs-navbar-color: rgba(255, 255, 255, 0.55);
+}
+
+#content-wrapper {
+	margin-left: 17rem;
+	/*     margin-top: 50px; */
+}
+
+.card-header {
+	background-color: rgb(78, 115, 223) !important;
+	color: white !important;
+	font-size: 30px;
+	font-weight: bold;
+	padding-top: 20px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	padding-left: 5% !important;
+}
+
+.card-body {
+	background-color: #fff;
+	margin-top: 10px;
+	padding: 20px;
+}
+
+.card {
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header .navbar-search {
+	display: flex;
+	justify-content: flex-end;
+	width: 25%;
+	margin-left: 10px;
+}
+
+.card-header .input-group {
+	width: 100%;
+}
+
+.card-header .form-control {
+	width: 100%;
+}
+
+.card-header .input-group-append button {
+	border-radius: 0;
+}
+
+@media ( max-width : 991px) {
+	#content-wrapper {
+		margin-left: 0;
+		margin-top: 10px;
+	}
+	#sideNav {
+		width: 100%;
+		position: static;
+	}
+	#sideNav .navbar-nav {
+		flex-direction: row;
+		justify-content: space-between;
+		width: 100%;
+	}
+	.card-header {
+		padding-top: 60px;
+		font-size: 24px;
+		text-align: center;
+	}
+	.card-body {
+		padding: 15px;
+	}
+	#sideNav .navbar-nav .nav-item .nav-link {
+		font-size: 15px; /* 글자 크기 줄이기 */
+	}
+}
+
+/* 사이드바 고정 상태 유지 */
+@media ( min-width : 992px) {
+	#sideNav {
+		padding-left: 0;
+		padding-right: 0;
+		text-align: center;
+		position: fixed;
+		top: 0;
+		left: 0;
+		display: flex;
+		flex-direction: column;
+		width: 17rem; /* 사이드바 너비 */
+		height: 100vh;
+	}
+	#sideNav .navbar-brand {
+		display: flex;
+		margin: auto auto 0;
+		padding: 0.5rem;
+	}
+	#sideNav .navbar-collapse {
+		display: flex;
+		align-items: flex-start;
+		flex-grow: 0;
+		width: 100%;
+		margin-bottom: auto;
+	}
+	#sideNav .navbar-collapse .navbar-nav {
+		flex-direction: column;
+		justify-content: space-between;
+		width: 100%;
+	}
+	#sideNav .navbar-nav .nav-item .nav-link {
+		font-size: 25px; 
+		margin-top: 3px;
+	}
+}
+
+/* 배지 컨테이너 스타일 */
+.badge-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px; /* 항목 간의 간격 */
+}
+
+/* 배지 아이템 기본 스타일 */
+.badge-item {
+	padding: 8px 12px;
+	font-size: 14px;
+	border-radius: 12px;
+}
+
+/* 중간 카테고리 배지 스타일 */
+.badge-container:nth-of-type(1) .badge-item {
+	background-color: #17a2b8; /* bg-info 색상 */
+	color: white;
+}
+
+/* 마지막 카테고리 배지 스타일 */
+.badge-container:nth-of-type(2) .badge-item {
+	background-color: #28a745; /* bg-success 색상 */
+	color: white;
+}
+
+/* 각 배지의 반응형 스타일 */
+@media ( max-width : 768px) {
+	.badge-item {
+		font-size: 12px; /* 작은 화면에서 글자 크기 축소 */
+	}
+}
+
+.container {
+	width: 50%;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 폼 그룹 스타일 */
+.form-group {
+	margin-bottom: 15px;
+}
+
+label {
+	font-size: 14px;
+	color: #333;
+	display: block;
+	margin-bottom: 5px;
+}
+
+input, select, textarea {
+	width: 100%;
+	padding: 10px;
+	margin-top: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 14px;
+}
+
+.form-group select {
+	padding: 8px;
+}
+
+.form-group textarea {
+	height: 100px;
+}
+
+/* 제출 버튼 스타일 */
+.btn {
+	display: block;
+	width: 100%;
+	padding: 12px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.btn:hover {
+	background-color: #45a049;
+}

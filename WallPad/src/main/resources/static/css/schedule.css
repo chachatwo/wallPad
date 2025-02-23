@@ -1,0 +1,325 @@
+@charset "UTF-8";
+
+.nav-link {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.navbar-nav {
+    --bs-nav-link-padding-x: 0;
+    --bs-nav-link-padding-y: 0.5rem;
+    --bs-nav-link-color: var(--bs-navbar-color);
+    --bs-nav-link-hover-color: var(--bs-navbar-hover-color);
+    --bs-nav-link-disabled-color: var(--bs-navbar-disabled-color);
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.bg-primary {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+    --bs-primary-rgb: 78, 115, 223;
+}
+
+#sideNav {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+#sideNav .navbar-nav .nav-item .nav-link {
+    font-weight: 800;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+}
+
+.navbar-dark {
+    --bs-navbar-color: rgba(255, 255, 255, 0.55);
+}
+
+#content-wrapper {
+    margin-left: 17rem;
+/*     margin-top: 50px; */
+}
+
+.card-header {
+    background-color: rgb(78, 115, 223) !important;
+    color: white !important;
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 5% !important;
+}
+
+.card-body {
+    background-color: #fff;
+    margin-top: 10px;
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header .navbar-search {
+    display: flex;
+    justify-content: flex-end;
+    width: 25%;
+    margin-left: 10px;
+}
+
+.card-header .input-group {
+    width: 100%;
+}
+
+.card-header .form-control {
+    width: 100%;
+}
+
+.card-header .input-group-append button {
+    border-radius: 0;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    overflow-x: auto; /* 모바일에서 가로 스크롤 가능 */
+    max-width: 100%;
+}
+
+th {
+    background-color: rgb(78, 115, 223) !important;
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    background-color: #F8F8F8;
+    cursor: pointer;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.table-responsive {
+    overflow-x: auto;  /* 테이블이 카드 바디를 초과할 경우 가로 스크롤을 허용 */
+    width: 100%;  /* 부모 요소에 맞게 테이블 크기를 조정 */
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6 {
+    width: auto !important;
+    white-space: nowrap;
+    background-color: #F8F8F8;
+}
+
+.col-1{
+	width: 7% !important;
+}
+.col-2{
+	width: 7% !important;
+}
+.col-3{
+	width: 7% !important;
+}
+.col-4{
+	width: 20% !important;
+}
+
+
+/* 달력 스타일 */
+#calendar {
+    width: 100%;  /* 달력이 부모 컨테이너에 맞게 크기 조정 */
+    overflow-x: auto;  /* 가로 스크롤을 허용 */
+    display: block;  /* 부모 컨테이너 크기에 맞게 블록으로 처리 */
+}
+
+#calendar table {
+    width: 100%;  /* 테이블이 부모 컨테이너 크기에 맞게 조정 */
+    table-layout: fixed;  /* 셀 크기가 고정되도록 설정 */
+}
+
+/* 셀 스타일 */
+#calendar th, #calendar td {
+    min-width: 40px;  /* 최소 너비를 설정 */
+    height: 40px;  /* 셀 높이 */
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px;  /* 셀 안의 여백 */
+}
+
+/* 모바일 화면에서 달력 스타일 개선 */
+@media (max-width: 767px) {
+    #calendar {
+        width: 100%;  /* 달력이 부모 컨테이너에 맞게 크기 조정 */
+        overflow-x: auto;  /* 가로 스크롤을 허용 */
+    }
+
+    #calendar table {
+        width: 100%;  /* 테이블 너비를 100%로 설정 */
+        table-layout: fixed;  /* 셀 너비를 고정 */
+    }
+
+    #calendar td {
+        padding: 5px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 991px) {
+    #content-wrapper {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    #sideNav {
+        width: 100%;
+        position: static;
+    }
+
+    #sideNav .navbar-nav {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .card-header {
+        padding-top: 60px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    .modal-content {
+        width: 80%;
+        padding: 15px;
+    }
+
+    .close-btn {
+        font-size: 24px;
+    }
+    
+    #sideNav .navbar-nav .nav-item .nav-link {
+		font-size: 15px; 
+	}
+}
+
+/* 사이드바 고정 상태 유지 */
+@media (min-width: 992px) {
+    #sideNav {
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        width: 17rem; /* 사이드바 너비 */
+        height: 100vh;
+    }
+    #sideNav .navbar-brand {
+        display: flex;
+        margin: auto auto 0;
+        padding: 0.5rem;
+    }
+    #sideNav .navbar-collapse {
+        display: flex;
+        align-items: flex-start;
+        flex-grow: 0;
+        width: 100%;
+        margin-bottom: auto;
+    }
+    #sideNav .navbar-collapse .navbar-nav {
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    
+   	#sideNav .navbar-nav .nav-item .nav-link {
+		font-size: 25px; 
+		margin-top: 3px;
+	}
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 200px;
+    max-width: 50%;
+    border-radius: 10px;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: black;
+}
+
+/* 일정이 있는 날짜 셀에 깜빡이는 효과 */
+@keyframes blink {
+    0% { background-color: yellow; }
+    50% { background-color: transparent; }
+    100% { background-color: yellow; }
+}
+
+.has-schedule {
+    animation: blink 1s infinite;  /* 1초마다 반복해서 깜빡이기 */
+}
+
+.monthContainer {
+    display: flex;
+    justify-content: space-between;  /* 달과 선택기 사이에 공간 배치 */
+    align-items: center;
+    padding: 10px;
+    width: 100%; /* 달력 선택기를 포함한 전체 너비 설정 */
+}

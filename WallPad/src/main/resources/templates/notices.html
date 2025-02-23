@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Resume - Start Bootstrap Theme</title>
+<link href="css/notices.css" rel="stylesheet" />
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://cdn.jsdelivr.net/npm/datatables.net-bs4/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet">
+</head>
+
+<body id="page-top">
+	<!-- 네비게이션-->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top"
+		id="sideNav">
+		<a class="navbar-brand js-scroll-trigger" href="#page-top">메뉴</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+			data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav">
+				<li class="nav-item"><a class="nav-link"
+					href="#">메인화면</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="#">공지사항</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="#">시설관리</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="#">하자보수</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="#">주차관제</a></li>
+			</ul>
+		</div>
+	</nav>
+	<!-- 네비게이션 끝-->
+
+	<div id="wrapper">
+		<!-- Content Wrapper -->
+		<div id="content-wrapper">
+			<!-- 테이블 시작 -->
+			<div id="content">
+				<div class="container-fluid">
+					<div class="card shadow">
+						<div
+							class="card-header">
+							공지사항
+							<form
+								class="form-inline d-flex align-items-center mw-100 navbar-search">
+								<div class="input-group">
+									<input type="text" class="form-control bg-light border-0 small"
+										placeholder="Search" aria-label="Search"
+										aria-describedby="basic-addon2">
+								</div>
+							</form>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="dataTable" width="100%"
+									cellspacing="0">
+									<thead>
+										<tr>
+											<th>번호</th>
+											<th>제목</th>
+											<th>내용</th>
+											<th>게시일</th>
+											<th>게시자</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="notice : ${notices}">
+											<td></td>
+											<td th:text="${notice.title}"></td>
+											<td th:text="${notice.content}"></td>
+											<td th:text="${notice.formattedCreatedAt}"></td>
+											<td th:text="${notice.createdBy}"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 테이블 끝 -->
+			<!-- Footer 시작 -->
+			<footer class="sticky-footer bg-white">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<br> <span>Hello! Your Family WallPad</span>
+					</div>
+				</div>
+			</footer>
+			<!-- Footer 끝 -->
+		</div>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+	<script src="js/notices.js"></script>
+
+	<div class="modal" id="contentModal" tabindex="-1"
+	 aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="contentModalLabel">전체 내용</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<!-- 전체 내용이 들어갈 영역 -->
+					<p id="modalContent">전체 내용이 여기에 표시됩니다.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>
