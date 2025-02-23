@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.wallpad.project.dto.EntryCarDTO;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
@@ -45,6 +46,9 @@ public interface ApiMapper {
 	
 	List<ReserveStatesDTO> reserveStates();
 	
+	void insertEntryCar(EntryCarDTO entryCarDTO);
 	
+	EntryCarDTO findCarNumber(String carNumber);
 	
+	List<EntryCarDTO> parkingStates();
 }

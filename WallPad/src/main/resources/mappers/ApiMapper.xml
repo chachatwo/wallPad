@@ -117,7 +117,8 @@
 		SELECT
 		carNumber, allowedPeriod
 		FROM parking_reserve
-		WHERE carNumber =
+		WHERE
+		carNumber =
 		#{carNumber}
 	</select>
 
@@ -142,6 +143,29 @@
 		FROM parking_reserve
 		WHERE
 		allowedPeriod >= CURDATE()
+	</select>
+
+
+	<select id="findCarNumber" parameterType="String"
+		resultType="com.wallpad.project.dto.EntryCarDTO">
+		SELECT carNumber
+		FROM parking_reserve
+		WHERE carNumber =
+		#{carNumber}
+		AND allowedPeriod > NOW();
+	</select>
+
+	<insert id="insertEntryCar"
+		parameterType="com.wallpad.project.dto.EntryCarDTO">
+		INSERT INTO entry_car (carNumber, entryTime)
+		VALUES
+		(#{carNumber}, #{entryTime});
+	</insert>
+
+	<select id="parkingStates"
+		resultType="com.wallpad.project.dto.EntryCarDTO">
+		SELECT carNumber, entryTime
+		FROM entry_car
 	</select>
 
 </mapper>

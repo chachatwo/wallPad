@@ -2,10 +2,12 @@ package com.wallpad.project.controller;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.wallpad.project.dto.EntryCarDTO;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
@@ -138,8 +142,7 @@ public class RestController {
 
 		return "이미지가 성공적으로 저장되었습니다.";
 	}
-	
-	
+
 	@PostMapping("/api/parking/reserve/states")
 	public List<ReserveStatesDTO> reservation() {
 		List<ReserveStatesDTO> reservationList = apiService.reserveStates();
@@ -154,6 +157,18 @@ public class RestController {
 		}
 
 		return reservationList;
+	}
+
+	@PostMapping("/api/register/car")
+	@ResponseBody
+	public EntryCarDTO registerEntryCar(@RequestBody EntryCarDTO entryCarDTO) {
+		EntryCarDTO result = apiService.registerEntryCar(entryCarDTO);
+
+		if (result != null) {
+			return result;
+		} else {
+			return null;
+		}
 	}
 
 }

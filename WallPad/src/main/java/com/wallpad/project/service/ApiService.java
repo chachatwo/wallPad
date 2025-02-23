@@ -2,6 +2,7 @@ package com.wallpad.project.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wallpad.project.dto.EntryCarDTO;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
@@ -106,7 +108,7 @@ public class ApiService {
 	public int saveParkingReserve(ParkingReserveDTO parkingReserveDTO) {
 		return apiMapper.saveParkingReserve(parkingReserveDTO);
 	}
-	
+
 	public int updateParkingReserve(ParkingReserveDTO parkingReserveDTO) {
 		return apiMapper.updateParkingReserve(parkingReserveDTO);
 	}
@@ -114,5 +116,20 @@ public class ApiService {
 	public List<ReserveStatesDTO> reserveStates() {
 		return apiMapper.reserveStates();
 	}
+
+	public EntryCarDTO registerEntryCar(EntryCarDTO entryCarDTO) {
+		EntryCarDTO existingEntryCar = apiMapper.findCarNumber(entryCarDTO.getCarNumber());
+
+		if (existingEntryCar != null) {
+			apiMapper.insertEntryCar(entryCarDTO);
+			return entryCarDTO;
+		}
+		return null; 
+	}
+	
+	public List<EntryCarDTO> parkingStates() {
+		return apiMapper.parkingStates();
+	}
+	
 
 }

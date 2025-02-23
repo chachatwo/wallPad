@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.wallpad.project.dto.EntryCarDTO;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
@@ -110,8 +111,19 @@ public class BasicController {
 			String message = (String) model.getAttribute("message");
 			model.addAttribute("message", message);
 		}
-		return "parking";
 
+		List<EntryCarDTO> parkingList = apiService.parkingStates();
+
+		model.addAttribute("parking", parkingList);
+
+		
+
+		return "parking";
+	}
+
+	@GetMapping("/entryCarTest")
+	public String entryCarTest(Model model) {
+		return "entryCarTest";
 	}
 
 }
