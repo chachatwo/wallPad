@@ -56,9 +56,9 @@
     font-weight: bold;
     padding-top: 20px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between; 
     align-items: center;
-    padding-left: 5% !important;
+    height: 70px;
 }
 
 .card-body {

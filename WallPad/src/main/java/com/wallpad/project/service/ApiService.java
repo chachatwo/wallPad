@@ -65,16 +65,26 @@ public class ApiService {
 		return notices;
 	}
 
+	public List<NoticeDTO> findRecentNotices() {
+		List<NoticeDTO> notices = apiMapper.findRecentNotices();
+
+		// 날짜 포맷 처리
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		for (NoticeDTO notice : notices) {
+			String formattedDate = notice.getCreatedAt().format(formatter);
+			notice.setFormattedCreatedAt(formattedDate);
+		}
+
+		return notices;
+	}
+
 	public List<MaintenanceScheduleDTO> maintenanceSchedules() {
 		return apiMapper.maintenanceSchedules();
 	}
 
-	// 수리 요청을 DB에 저장하는 메소드
 	public void saveRepairRequest(RepairRequestDTO repairRequestDTO, MultipartFile[] imageUploads) {
-		// 수리 요청 정보 저장
 		apiMapper.saveRepairRequest(repairRequestDTO);
 
-		// 저장된 수리 요청 ID 조회
 		int repairRequestId = apiMapper.getLastInsertedId();
 
 		if (imageUploads != null) {
@@ -100,6 +110,10 @@ public class ApiService {
 			}
 		}
 	}
+	
+	public List<RepairRequestDTO> findRepairRequest() {
+		return apiMapper.findRepairRequest();
+	}
 
 	public ParkingReserveDTO findByCarNumber(String carNumber) {
 		return apiMapper.findByCarNumber(carNumber);
@@ -124,12 +138,11 @@ public class ApiService {
 			apiMapper.insertEntryCar(entryCarDTO);
 			return entryCarDTO;
 		}
-		return null; 
+		return null;
 	}
-	
+
 	public List<EntryCarDTO> parkingStates() {
 		return apiMapper.parkingStates();
 	}
-	
 
 }

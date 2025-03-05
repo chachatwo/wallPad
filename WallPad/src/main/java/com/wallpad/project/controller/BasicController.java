@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import com.wallpad.project.dto.EntryCarDTO;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
-import com.wallpad.project.dto.ReserveStatesDTO;
+import com.wallpad.project.dto.RepairRequestDTO;
 import com.wallpad.project.service.ApiService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class BasicController {
 	}
 
 	@GetMapping("/")
-	public String dashboard(Model model) {
+	public String main(Model model) {
 
 		return "dashboard";
 	}
@@ -43,18 +44,48 @@ public class BasicController {
 		return "login";
 	}
 
-	@GetMapping("/dashboard")
-	public String dashboard2(Model model) {
-
-		return "dashboard";
-	}
-
 	@GetMapping("/notices")
 	public String getNotices(Model model) {
 		List<NoticeDTO> notices = apiService.findAllNotices();
 		model.addAttribute("notices", notices);
 
 		return "notices";
+	}
+
+	@GetMapping("/dashboard")
+	public String getdashboard(Model model) {
+		List<NoticeDTO> notices = apiService.findRecentNotices();
+
+		if (notices.size() > 3) {
+			notices = notices.subList(0, 3);
+		}
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		for (NoticeDTO notice : notices) {
+			String formattedDate = notice.getCreatedAt().format(formatter);
+			notice.setFormattedCreatedAt(formattedDate);
+		}
+
+		model.addAttribute("notices", notices);
+
+		List<MaintenanceScheduleDTO> schedules = apiService.maintenanceSchedules();
+
+		if (schedules.size() > 3) {
+			schedules = schedules.subList(0, 3);
+		}
+
+		model.addAttribute("schedules", schedules);
+
+		List<RepairRequestDTO> repair = apiService.findRepairRequest();
+
+		if (repair.size() > 3) {
+			repair = repair.subList(0, 3);
+		}
+
+		model.addAttribute("repair", repair);
+
+		return "dashboard";
 	}
 
 	@GetMapping("/schedule")
@@ -95,11 +126,11 @@ public class BasicController {
 		if (existingReservation != null) {
 			existingReservation.setAllowedPeriod(reserveTimestamp);
 			apiService.updateParkingReserve(existingReservation);
-			redirectAttributes.addFlashAttribute("message", "기존 차량의 출입기간이 업데이트되었습니다.");
+			redirectAttributes.addFlashAttribute("message", "차량의 출입기간이 갱신되었습니다.");
 		} else {
 			System.out.println("새 예약을 추가합니다.");
 			apiService.saveParkingReserve(parkingReserveDTO);
-			redirectAttributes.addFlashAttribute("message", "신규 차량의 예약이 완료되었습니다.");
+			redirectAttributes.addFlashAttribute("message", "차량의 예약이 완료되었습니다.");
 		}
 
 		return "redirect:/parking";
@@ -115,8 +146,6 @@ public class BasicController {
 		List<EntryCarDTO> parkingList = apiService.parkingStates();
 
 		model.addAttribute("parking", parkingList);
-
-		
 
 		return "parking";
 	}

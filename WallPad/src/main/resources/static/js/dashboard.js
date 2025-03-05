@@ -220,6 +220,18 @@ function handleError(error) {
 	}
 }
 
+
+document.querySelectorAll('.notices-widget li').forEach(function(noticeItem) {
+	noticeItem.addEventListener('click', function() {
+		var fullContent = noticeItem.querySelector('.content').innerText; // 공지사항의 내용을 가져옴
+		document.getElementById('modalContent').innerText = fullContent; // 모달 내용에 삽입
+
+		var myModal = new bootstrap.Modal(document.getElementById('contentModal')); // 모달 객체 생성
+		myModal.show(); // 모달 표시
+	});
+});
+
+
 window.onload = function() {
 	updateClock();
 	setInterval(updateClock, 1000);

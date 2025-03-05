@@ -15,6 +15,7 @@ body {
 	grid-template-columns: repeat(3, 1fr);
 	gap: 20px;
 	padding: 20px;
+	align-items: stretch;
 }
 
 /* 열 스타일 */
@@ -26,25 +27,25 @@ body {
 .column-left .dashboard-widget {
 	display: flex;
 	flex-direction: column;
-	justify-content: center; /* 수직 중앙 정렬 */
-	align-items: center; /* 수평 중앙 정렬 */
+	justify-content: center;
+	align-items: center;
 	padding: 20px;
-	background-color: #fff;
+	background-color: #e6fffe;
 	border-radius: 8px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	width: 100%; /* 위젯 너비를 100%로 설정하여 꽉 차도록 */
+	width: 100%;
+	height: 658px;
 }
 
 .column-left, .column-middle, .column-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* 콘텐츠가 위로 쌓이도록 설정 */
-  gap: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start; /* 콘텐츠가 위로 쌓이도록 설정 */
+	gap: 15px;
 }
 
-/* 각 위젯 스타일 */
 .dashboard-widget {
-	background-color: #fff;
+	background-color: #e6fffe;
 	padding: 15px;
 	border-radius: 8px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -73,14 +74,14 @@ body {
 /* 페이지 이동 버튼 스타일 */
 .action-button {
 	padding: 10px 15px;
-	background-color: rgb(198, 187, 198); /* 옅은 하늘색 */
+	background-color: rgb(164, 209, 255);
 	color: white;
 	border: none;
 	border-radius: 5px;
 	cursor: pointer;
 	text-align: center;
 	font-size: 14px;
-	width: 100%;
+	width:100%;
 }
 
 .action-button:hover {
@@ -109,8 +110,8 @@ body {
 }
 
 .head2 {
-	font-style: italic;
-	font-size: 12px !important;
+	font-size: 15px !important;
+	font-weight: bold;
 }
 
 #weather {
@@ -126,12 +127,80 @@ body {
 }
 
 #cityName {
-	display: flex; /* 가로로 배치 */
-	align-items: center; /* 수직 중앙 정렬 */
+	display: flex;
+	align-items: center;
 	font-size: 25px;
 }
 
 #locationPin {
-	margin-right: 10px; /* 이모티콘과 도시 이름 사이의 간격 조정 */
-	font-size: 20px; /* 이모티콘 크기 조정 */
+	margin-right: 10px;
+	font-size: 20px;
+}
+
+#notices {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#maintenance-schedule {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#repair {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#parking {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#notices li {
+	display: flex;
+	align-items: center;
+	padding-left: 0;
+	margin-left: 0;
+	text-align: left;
+}
+
+strong {
+	display: inline;
+}
+
+.title {
+	margin-left: 10px;
+	display: inline-block;
+	width: 320px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+}
+
+.location {
+	display: flex;
+	align-items: center; 
+}
+
+#locationPin {
+	margin-right: 3px; 
+	margin-bottom: 20px;
+}  
+
+#temperature{
+	font-family: 'Montserrat', sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+#airQualityText{
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
 }

@@ -29,9 +29,13 @@ public interface ApiMapper {
 
 	List<NoticeDTO> findAllNotices();
 	
+	List<NoticeDTO> findRecentNotices();
+	
 	List<MaintenanceScheduleDTO> maintenanceSchedules();
 	
 	void saveRepairRequest(RepairRequestDTO repairRequestDTO);
+	
+	List<RepairRequestDTO> findRepairRequest();
 	
 	int getLastInsertedId();
 	

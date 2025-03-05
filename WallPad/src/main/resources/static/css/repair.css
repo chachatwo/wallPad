@@ -58,9 +58,9 @@
 	font-weight: bold;
 	padding-top: 20px;
 	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	padding-left: 5% !important;
+    justify-content: space-between; 
+    align-items: center;
+    height: 70px;
 }
 
 .card-body {

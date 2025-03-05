@@ -111,24 +111,15 @@ public class RestController {
 	}
 
 	@PostMapping("/api/repair")
-	public String submitRequest(@RequestParam("apartmentNumber") String apartmentNumber,
+	public void submitRequest(@RequestParam("apartmentNumber") String apartmentNumber,
 			@RequestParam("majorCategory") String majorCategory, @RequestParam("middleCategory") String middleCategory,
 			@RequestParam("lastCategory") String lastCategory, @RequestParam("request") String request,
-			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads) {
+			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads,
+			HttpServletResponse response) throws IOException {
 
-		System.out.println("메이저카테고리" + majorCategory);
-		System.out.println("미들카테고리" + middleCategory);
-		System.out.println("라스트카테고리" + lastCategory);
-		System.out.println("요청사항" + request);
-		System.out.println("imageUploads 배열: " + Arrays.toString(imageUploads));
-
+		System.out.println("요청사항: " + request);
 		if (imageUploads != null) {
-			System.out.println("이미지 업로드된 파일 개수: " + imageUploads.length);
-			for (MultipartFile file : imageUploads) {
-				System.out.println("파일 이름: " + file.getOriginalFilename());
-			}
-		} else {
-			System.out.println("이미지 업로드가 없습니다.");
+			System.out.println("업로드된 이미지 개수: " + imageUploads.length);
 		}
 
 		RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
@@ -140,7 +131,7 @@ public class RestController {
 
 		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
 
-		return "이미지가 성공적으로 저장되었습니다.";
+		response.sendRedirect("/repair");
 	}
 
 	@PostMapping("/api/parking/reserve/states")

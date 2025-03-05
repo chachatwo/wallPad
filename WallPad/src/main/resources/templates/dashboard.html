@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>대시보드</title>
 <link rel="stylesheet" href="/css/dashboard.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+	rel="stylesheet">
+
 </head>
 <body>
 	<div class="dashboard-container">
@@ -12,18 +19,20 @@
 		<div class="column column-left">
 			<div class="dashboard-widget">
 				<!-- 위치, 날짜, 날씨, 미세먼지 -->
-				<br><br><br>
+				<br> <br> <br>
 				<p id="currentDate"></p>
-				<br><br><br>
-				<span id="locationPin">🚩</span>
-				<p id="cityName"></p>
-				<br><br><br>
-				<p id="weather"></p>
+				<br> <br> <br>
+				<div class="location">
+					<span id="locationPin">🚩</span>
+					<p id="cityName"></p>
+				</div>
+				<br> <br> <br>
 				<p id="temperature"></p>
-				<br><br><br>
-				<h2 class="head2">미세먼지</h2>
+				<p id="weather"></p>
+				<br> <br> <br>
+				<h2 id="airQualityText">미세먼지</h2>
 				<p id="airQuality"></p>
-				<br><br><br>
+				<br> <br> <br>
 			</div>
 		</div>
 
@@ -32,50 +41,81 @@
 			<div class="dashboard-widget notices-widget">
 				<h2 class="head2">최신 공지사항</h2>
 				<ul id="notices">
-					<li>공지사항 1</li>
-					<li>공지사항 2</li>
-					<li>공지사항 3</li>
+					<li th:each="notice : ${notices}"><span
+						th:text="${notice.formattedCreatedAt}"></span><span class="title"
+						th:text="${notice.title}"></span> <span class="content"
+						th:text="${notice.content}" style="display: none;"></span></li>
+
 				</ul>
 			</div>
 			<div class="dashboard-widget maintenance-schedule-widget">
-				<h2 class="head2">유지보수 스케줄</h2>
+				<h2 class="head2">시설관리 일정</h2>
 				<ul id="maintenance-schedule">
-					<li>유지보수 일정 1</li>
-					<li>유지보수 일정 2</li>
+					<li th:each="schedules : ${schedules}"><span
+						th:text="${schedules.title}"></span></li>
 				</ul>
 			</div>
-			<div class="dashboard-widget messages-widget">
-				<h2 class="head2">최신 메시지</h2>
-				<ul id="messages">
-					<li>메시지 1</li>
-					<li>메시지 2</li>
+			<div class="dashboard-widget repair-widget">
+				<h2 class="head2">하자보수 신청이력</h2>
+				<ul id="repair">
+					<li th:each="repair : ${repair}"><span
+						th:text="${repair.lastCategory}+'이 있는 '+${repair.middleCategory}+'의 '+${repair.majorCategory}+'를 신청'"></span></li>
 				</ul>
 			</div>
-			<div class="dashboard-widget vehicle-reservation-widget">
-				<h2 class="head2">차량 방문 예약 현황</h2>
-				<p id="vehicleReservationCount">예약된 차량 수: 5</p>
-				<button class="action-button"
-					onclick="window.location.href='/vehicle/reservations';">상세보기</button>
+			<div class="dashboard-widget parking-widget">
+				<h2 class="head2">방문차량 예약현황</h2>
+				<ul id="parking">
+					<li>예약차량 1</li>
+					<li>예약차량 2</li>
+					<li>예약차량 3</li>
+				</ul>
 			</div>
 		</div>
 		<!-- 3열 -->
 		<div class="column column-right">
 			<div class="dashboard-widget button-widget">
-				<button id="goNotices" class="action-button">공지사항</button>
+				<button class="action-button"
+					onclick="window.location.href='http://localhost:8080/notices'">공지사항</button>
 			</div>
 			<div class="dashboard-widget button-widget">
-				<button id="goMaintenance" class="action-button">유지보수 스케줄</button>
+				<button class="action-button"
+					onclick="window.location.href='http://localhost:8080/schedule'">시설관리</button>
 			</div>
 			<div class="dashboard-widget button-widget">
-				<button id="goMessages" class="action-button">메시지함</button>
+				<button class="action-button"
+					onclick="window.location.href='http://localhost:8080/repair'">하자보수</button>
 			</div>
 			<div class="dashboard-widget button-widget">
-				<button id="goParking" class="action-button">주차관제</button>
+				<button class="action-button"
+					onclick="window.location.href='http://localhost:8080/parking'">주차관제</button>
 			</div>
 		</div>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="js/dashboard.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+	<!-- 모달 HTML -->
+	<div class="modal fade" id="contentModal" tabindex="-1"
+		aria-labelledby="contentModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="contentModalLabel">공지사항 상세</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="modalContent">
+					<!-- 클릭한 공지사항의 내용이 여기에 표시됩니다 -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>
