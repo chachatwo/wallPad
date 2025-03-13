@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Resume - Start Bootstrap Theme</title>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+	rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+	<h1>차량 입차 등록</h1>
+	<form id="entryForm" action="/api/register/car" method="POST">
+		<label for="carNumber">차량 번호:</label> <input type="text"
+			id="carNumber" name="carNumber" required><br> <label
+			for="entryTime">입차 시간:</label> <input type="text" id="entryTime"
+			name="entryTime" value="2025-02-21 15:30:00" required><br>
+		<button type="submit">입차 test</button>
+	</form>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+	<script src="js/parking.js"></script>
+
+
+</body>
+</html>

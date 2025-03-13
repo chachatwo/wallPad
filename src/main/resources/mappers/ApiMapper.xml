@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wallpad.project.mapper.ApiMapper">
+
+	<!-- 아이디 중복 체크 -->
+	<select id="userNameCheck" resultType="int">
+		SELECT COUNT(*) FROM users
+		WHERE username = #{username}
+	</select>
+
+	<!-- 이메일 중복 체크 -->
+	<select id="emailCheck" resultType="int">
+		SELECT COUNT(*) FROM users
+		WHERE email = #{email}
+	</select>
+
+
+	<insert id="saveUserData"
+		parameterType="com.wallpad.project.dto.SignUpDTO">
+		INSERT INTO users
+		(
+		username
+		,password
+		,name
+		,gender
+		,phone_num
+		,email
+		)
+		VALUES
+		(
+		#{username}
+		,#{password}
+		,#{name}
+		,#{gender}
+		,#{phone_num}
+		,#{email}
+		)
+	</insert>
+
+
+	<!-- 이메일 인증 상태 업데이트 -->
+	<update id="updateEmailVerified" parameterType="String">
+		UPDATE users
+		SET
+		email_verified = TRUE
+		WHERE email = #{email}
+	</update>
+
+	<select id="findByUsername" parameterType="String"
+		resultType="com.wallpad.project.dto.UserDTO">
+		SELECT username, password, name, gender, phone_num, email
+		FROM users
+		WHERE username = #{username}
+	</select>
+
+	<select id="findAllNotices"
+		resultType="com.wallpad.project.dto.NoticeDTO">
+		SELECT id, title, content, createdAt, createdBy
+		FROM notices
+	</select>
+
+	<select id="findRecentNotices"
+		resultType="com.wallpad.project.dto.NoticeDTO">
+		SELECT id, title, content, createdAt, createdBy
+		FROM notices
+		ORDER BY createdAt DESC
+	</select>
+
+
+	<select id="maintenanceSchedules"
+		resultType="com.wallpad.project.dto.MaintenanceScheduleDTO">
+		SELECT
+		maintenance_date AS maintenanceDate,
+		start_time AS
+		startTime,
+		end_time AS endTime,
+		title,
+		description,
+		status
+		FROM
+		maintenance_schedule
+		WHERE maintenance_date >=
+		CURDATE()
+		ORDER BY
+		maintenance_date ASC;
+	</select>
+
+
+	<!-- 수리 요청 정보 저장 -->
+	<insert id="saveRepairRequest"
+		parameterType="com.wallpad.project.dto.RepairRequestDTO">
+		INSERT INTO repair_request (
+		apartmentNumber,
+		majorCategory, middleCategory, lastCategory, request
+		)
+		VALUES (
+		#{apartmentNumber}, #{majorCategory}, #{middleCategory},
+		#{lastCategory}, #{request}
+		)
+	</insert>
+
+	<select id="findRepairRequest"
+		resultType="com.wallpad.project.dto.RepairRequestDTO">
+		SELECT
+		apartmentNumber,
+		majorCategory, middleCategory,
+		lastCategory, request
+		FROM
+		repair_request
+		WHERE
+		status = '예정' or status = '진행중'
+		ORDER BY
+		requestTime DESC;
+	</select>
+
+
+
+	<!-- 마지막으로 삽입된 수리 요청 ID 조회 -->
+	<select id="getLastInsertedId" resultType="int">
+		SELECT
+		LAST_INSERT_ID()
+	</select>
+
+
+	<!-- 이미지 정보 저장 -->
+	<insert id="saveImage"
+		parameterType="com.wallpad.project.dto.RepairImageDTO">
+		INSERT INTO repair_image (
+		repairRequestId, imagePath
+		)
+		VALUES (
+		#{repairRequestId}, #{imagePath}
+		)
+	</insert>
+
+
+	<select id="findByCarNumber" parameterType="String"
+		resultType="com.wallpad.project.dto.ParkingReserveDTO">
+		SELECT
+		carNumber, allowedPeriod
+		FROM parking_reserve
+		WHERE
+		carNumber =
+		#{carNumber}
+	</select>
+
+	<insert id="saveParkingReserve"
+		parameterType="com.wallpad.project.dto.ParkingReserveDTO">
+		INSERT INTO parking_reserve (carNumber, allowedPeriod)
+		VALUES (#{carNumber}, #{allowedPeriod})
+	</insert>
+
+	<update id="updateParkingReserve"
+		parameterType="com.wallpad.project.dto.ParkingReserveDTO">
+		UPDATE parking_reserve
+		SET allowedPeriod =
+		#{allowedPeriod}
+		WHERE carNumber = #{carNumber}
+	</update>
+
+
+	<select id="reserveStates"
+		resultType="com.wallpad.project.dto.ReserveStatesDTO">
+		SELECT carNumber, allowedPeriod
+		FROM parking_reserve
+		WHERE
+		allowedPeriod >= CURDATE()
+	</select>
+
+
+	<select id="findCarNumber" parameterType="String"
+		resultType="com.wallpad.project.dto.EntryCarDTO">
+		SELECT carNumber
+		FROM parking_reserve
+		WHERE carNumber =
+		#{carNumber}
+		AND allowedPeriod > NOW();
+	</select>
+
+	<insert id="insertEntryCar"
+		parameterType="com.wallpad.project.dto.EntryCarDTO">
+		INSERT INTO entry_car (carNumber, entryTime)
+		VALUES
+		(#{carNumber}, #{entryTime});
+	</insert>
+
+	<select id="parkingStates"
+		resultType="com.wallpad.project.dto.EntryCarDTO">
+		SELECT carNumber, entryTime
+		FROM entry_car
+	</select>
+
+</mapper>
