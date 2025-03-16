@@ -142,7 +142,7 @@ function updateWeatherAndAirQuality(position) {
 				weatherIcon = '🌧️'; // 비 아이콘
 			} else if (weatherDescription.includes('snow') || weatherDescription.includes('눈')) {
 				weatherIcon = '❄️'; // 눈 아이콘
-			} else if (weatherDescription.includes('fog') || weatherDescription.includes('안개') || weatherDescription.includes('박무') || weatherDescription.includes('mist')) {
+			} else if (weatherDescription.includes('fog') || weatherDescription.includes('안개') || weatherDescription.includes('박무') || weatherDescription.includes('흐림') || weatherDescription.includes('온흐림') || weatherDescription.includes('mist')) {
 				weatherIcon = '🌫️'; // 안개 아이콘
 			} else if (weatherDescription.includes('thunderstorm') || weatherDescription.includes('천둥')) {
 				weatherIcon = '🌩️'; // 천둥 아이콘

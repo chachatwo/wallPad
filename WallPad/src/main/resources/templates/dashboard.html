@@ -45,14 +45,16 @@
 						th:text="${notice.formattedCreatedAt}"></span><span class="title"
 						th:text="${notice.title}"></span> <span class="content"
 						th:text="${notice.content}" style="display: none;"></span></li>
+					<li th:if="${notices.empty}"><span>현재 최신 공지사항이 없습니다.</span></li>
 
 				</ul>
 			</div>
 			<div class="dashboard-widget maintenance-schedule-widget">
-				<h2 class="head2">시설관리 일정</h2>
+				<h2 class="head2">주요일정</h2>
 				<ul id="maintenance-schedule">
 					<li th:each="schedules : ${schedules}"><span
 						th:text="${schedules.title}"></span></li>
+					<li th:if="${schedules.empty}"><span>현재 주요일정이 없습니다.</span></li>
 				</ul>
 			</div>
 			<div class="dashboard-widget repair-widget">
@@ -60,14 +62,17 @@
 				<ul id="repair">
 					<li th:each="repair : ${repair}"><span
 						th:text="${repair.lastCategory}+'이 있는 '+${repair.middleCategory}+'의 '+${repair.majorCategory}+'를 신청'"></span></li>
+					<li th:if="${repair.empty}"><span>현재 하자보수 신청이력 정보가
+							없습니다.</span></li>
 				</ul>
 			</div>
 			<div class="dashboard-widget parking-widget">
 				<h2 class="head2">방문차량 예약현황</h2>
 				<ul id="parking">
-					<li>예약차량 1</li>
-					<li>예약차량 2</li>
-					<li>예약차량 3</li>
+					<li th:each="reserve : ${reserve}"><span
+						th:text="${reserve.carNumber}"></span></li>
+					<li th:if="${reserve.empty}"><span>현재 방문차량 예약 현황이 없습니다.</span>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -79,7 +84,7 @@
 			</div>
 			<div class="dashboard-widget button-widget">
 				<button class="action-button"
-					onclick="window.location.href='http://localhost:8080/schedule'">시설관리</button>
+					onclick="window.location.href='http://localhost:8080/schedule'">주요일정</button>
 			</div>
 			<div class="dashboard-widget button-widget">
 				<button class="action-button"

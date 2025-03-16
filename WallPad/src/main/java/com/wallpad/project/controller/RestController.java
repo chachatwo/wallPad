@@ -117,7 +117,6 @@ public class RestController {
 			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads,
 			HttpServletResponse response) throws IOException {
 
-		System.out.println("요청사항: " + request);
 		if (imageUploads != null) {
 			System.out.println("업로드된 이미지 개수: " + imageUploads.length);
 		}

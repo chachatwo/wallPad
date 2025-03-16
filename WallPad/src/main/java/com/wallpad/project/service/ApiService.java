@@ -1,9 +1,15 @@
 package com.wallpad.project.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Writer;
+import java.nio.channels.Channels;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +18,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.WriteChannel;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.wallpad.project.dto.EntryCarDTO;
 import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
@@ -84,33 +97,50 @@ public class ApiService {
 
 	public void saveRepairRequest(RepairRequestDTO repairRequestDTO, MultipartFile[] imageUploads) {
 		apiMapper.saveRepairRequest(repairRequestDTO);
-
 		int repairRequestId = apiMapper.getLastInsertedId();
 
-		if (imageUploads != null) {
-			for (MultipartFile imageUpload : imageUploads) {
-				try {
-					String imageName = UUID.randomUUID().toString().replace("-", "") + "_"
-							+ imageUpload.getOriginalFilename();
-					String imagePath = "/images/" + imageName;
+		if (imageUploads != null && imageUploads.length > 0) {
+			try {
+				String credentialsPath = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+				String bucketName = System.getenv("GOOGLE_CLOUD_STORAGE_BUCKET");
 
-					File targetFile = new File(uploadDir + imageName);
-					targetFile.getParentFile().mkdirs(); // 디렉토리 생성
-					imageUpload.transferTo(targetFile);
-					System.out.println("파일이 저장될 경로: " + targetFile.getAbsolutePath());
+				GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+						.createScoped(Arrays.asList("https://www.googleapis.com/auth/devstorage.read_write"));
+				Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
 
-					RepairImageDTO repairImageDTO = new RepairImageDTO();
-					repairImageDTO.setRepairRequestId(repairRequestId);
-					repairImageDTO.setImagePath(imagePath);
-
-					apiMapper.saveImage(repairImageDTO);
-				} catch (IOException e) {
-					e.printStackTrace();
+				if (storage == null) {
+					System.out.println("Google Cloud Storage 인증 실패");
+					return;
 				}
+
+				for (MultipartFile imageUpload : imageUploads) {
+					if (!imageUpload.isEmpty()) {
+						String imageName = UUID.randomUUID().toString().replace("-", "") + "_"
+								+ imageUpload.getOriginalFilename();
+						String imagePath = "images/" + imageName;
+
+						BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, imagePath)
+								.setContentType(imageUpload.getContentType()) 
+								.build();
+
+						Blob blob = storage.create(blobInfo, imageUpload.getInputStream());
+
+						String imageUrl = "https://storage.googleapis.com/" + bucketName + "/" + imagePath;
+						System.out.println("GCS에 파일이 저장됨: " + imageUrl);
+
+						RepairImageDTO repairImageDTO = new RepairImageDTO();
+						repairImageDTO.setRepairRequestId(repairRequestId);
+						repairImageDTO.setImagePath(imageUrl);
+						apiMapper.saveImage(repairImageDTO);
+					}
+				}
+			} catch (IOException e) {
+				System.out.println("파일 업로드 중 오류 발생: " + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public List<RepairRequestDTO> findRepairRequest() {
 		return apiMapper.findRepairRequest();
 	}

@@ -19,6 +19,7 @@ import com.wallpad.project.dto.MaintenanceScheduleDTO;
 import com.wallpad.project.dto.NoticeDTO;
 import com.wallpad.project.dto.ParkingReserveDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
+import com.wallpad.project.dto.ReserveStatesDTO;
 import com.wallpad.project.service.ApiService;
 
 import lombok.RequiredArgsConstructor;
@@ -85,6 +86,15 @@ public class BasicController {
 
 		model.addAttribute("repair", repair);
 
+		
+		List<ReserveStatesDTO> reserve = apiService.reserveStates();
+		
+		if (reserve.size() > 3) {
+			reserve = reserve.subList(0, 3);
+		}
+
+		model.addAttribute("reserve", reserve);
+		
 		return "dashboard";
 	}
 
