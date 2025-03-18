@@ -1,3 +1,16 @@
+function validateCarNumber() {
+	const carNumber = document.getElementById('carNumber').value;
+	const carNum = /^[0-9]{2}[가-힣][0-9]{4}$|^[0-9]{3}[가-힣][0-9]{4}$/;
+	const errorMessage = document.getElementById('carNumberError');
+
+	if (!carNum.test(carNumber)) {
+		errorMessage.style.display = 'block';
+		return false; 
+	} else {
+		errorMessage.style.display = 'none';
+		return true; 
+	}
+}
 
 $(document).ready(function() {
 	$('#entryForm').submit(function(event) {
