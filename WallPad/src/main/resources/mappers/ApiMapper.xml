@@ -40,6 +40,12 @@
 		)
 	</insert>
 
+	<select id="checkUserByEmail" resultType="int">
+		SELECT COUNT(*)
+		FROM users
+		WHERE email = #{email}
+	</select>
+
 
 	<!-- 이메일 인증 상태 업데이트 -->
 	<update id="updateEmailVerified" parameterType="String">
@@ -111,7 +117,8 @@
 		FROM
 		repair_request
 		WHERE
-		status = '예정' or status = '진행중'
+		status = '예정' or status =
+		'진행중'
 		ORDER BY
 		requestTime DESC;
 	</select>

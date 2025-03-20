@@ -21,12 +21,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AuthService {
 
-	private final ApiMapper apiMapper; 
+	private final ApiMapper apiMapper;
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@Value("${jwt.secret}") 
-	private String secretKey; 
+	@Value("${jwt.secret}")
+	private String secretKey;
 
 	// 이메일 전송 함수
 	public void sendVerificationEmail(String toEmail, String token) {
@@ -35,8 +35,8 @@ public class AuthService {
 			String text = "안녕하세요! 이메일 인증을 위해 아래 링크를 클릭하세요:\n" + "http://localhost:8080/verify-email?token=" + token;
 
 			MimeMessageHelper message = new MimeMessageHelper(mailSender.createMimeMessage(), true);
-			message.setFrom("wallpadtest@gmail.com"); 
-			message.setTo(toEmail); 
+			message.setFrom("wallpadtest@gmail.com");
+			message.setTo(toEmail);
 			message.setSubject(subject);
 			message.setText(text);
 
@@ -49,7 +49,7 @@ public class AuthService {
 	// JWT 토큰 생성 함수
 	public String generateToken(String userEmail) {
 		return Jwts.builder().setSubject(userEmail).setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + 3600000)) 
+				.setExpiration(new Date(System.currentTimeMillis() + 3600000))
 				.signWith(SignatureAlgorithm.HS256, secretKey).compact();
 	}
 
@@ -61,6 +61,11 @@ public class AuthService {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	public boolean checkUserByEmail(String email) {
+		int count = apiMapper.checkUserByEmail(email);
+		return count > 0;
 	}
 
 	public void updateEmailVerified(String email) {

@@ -17,6 +17,8 @@ import com.wallpad.project.dto.UserDTO;
 @Mapper
 public interface ApiMapper {
 
+	int checkUserByEmail(String email);
+	
 	int saveUserData(SignUpDTO signUpDTO);
 
 	void updateEmailVerified(String email);

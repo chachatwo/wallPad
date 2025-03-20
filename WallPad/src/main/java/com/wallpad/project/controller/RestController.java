@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
@@ -70,16 +71,8 @@ public class RestController {
 	}
 
 	@PostMapping("/users/insert")
-	public String signUp(@ModelAttribute SignUpDTO signUpDTO) {
-		System.out.println(signUpDTO.getUsername());
-		System.out.println(signUpDTO.getPassword());
-		System.out.println(signUpDTO.getApartmentNumber());
-		System.out.println(signUpDTO.getEmail());
-		System.out.println(signUpDTO.getGender());
-		System.out.println(signUpDTO.getPhone_num());
-		System.out.println(signUpDTO.getName());
-
-		apiService.saveUserData(signUpDTO);
+	public String signUp(@ModelAttribute SignUpDTO signUpDTO, HttpSession session) {
+		session.setAttribute("signUpDTO", signUpDTO);
 
 		String token = authService.generateToken(signUpDTO.getEmail());
 		authService.sendVerificationEmail(signUpDTO.getEmail(), token);
@@ -88,16 +81,30 @@ public class RestController {
 	}
 
 	@GetMapping("/verify-email")
-	public RedirectView verifyEmail(@RequestParam String token) {
+	public RedirectView verifyEmail(@RequestParam String token, HttpSession session) {
 		RedirectView redirectView = new RedirectView();
 
-		// 토큰 유효성 검증
 		if (authService.validateToken(token)) {
 
+			// 이메일 추출
 			String email = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
 
-			authService.updateEmailVerified(email);
-			redirectView.setUrl("/login");
+			if (!authService.checkUserByEmail(email)) {
+
+				SignUpDTO signUpDTO = (SignUpDTO) session.getAttribute("signUpDTO");
+
+				if (signUpDTO != null && signUpDTO.getEmail().equals(email)) {
+					apiService.saveUserData(signUpDTO); 
+					authService.updateEmailVerified(email); 
+
+					redirectView.setUrl("/login");
+				} else {
+					redirectView.setUrl("/error"); 
+				}
+			} else {
+				redirectView.setUrl("/error");
+			}
+
 		} else {
 			redirectView.setUrl("/error");
 		}
