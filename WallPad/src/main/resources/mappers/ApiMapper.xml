@@ -24,6 +24,7 @@
 		,password
 		,name
 		,gender
+		,apartmentNumber
 		,phone_num
 		,email
 		)
@@ -33,6 +34,7 @@
 		,#{password}
 		,#{name}
 		,#{gender}
+		,#{apartmentNumber}
 		,#{phone_num}
 		,#{email}
 		)

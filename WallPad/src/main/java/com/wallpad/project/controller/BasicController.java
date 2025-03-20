@@ -34,12 +34,6 @@ public class BasicController {
 		return "signup";
 	}
 
-	@GetMapping("/")
-	public String main(Model model) {
-
-		return "dashboard";
-	}
-
 	@GetMapping("/login")
 	public String Login(Model model) {
 		return "login";

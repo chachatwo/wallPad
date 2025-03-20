@@ -73,6 +73,7 @@ public class RestController {
 	public String signUp(@ModelAttribute SignUpDTO signUpDTO) {
 		System.out.println(signUpDTO.getUsername());
 		System.out.println(signUpDTO.getPassword());
+		System.out.println(signUpDTO.getApartmentNumber());
 		System.out.println(signUpDTO.getEmail());
 		System.out.println(signUpDTO.getGender());
 		System.out.println(signUpDTO.getPhone_num());

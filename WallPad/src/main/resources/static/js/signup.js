@@ -1,6 +1,25 @@
+function validateApartNum() {
+	const apartNum = document.getElementById('apartmentNumber').value;
+	const errorMessage = document.getElementById('errorMessage');
+
+	// 입력값이 비어 있을 때 에러 메시지 제거
+	if (apartNum.trim() === "") {
+		errorMessage.textContent = "";
+		return;
+	}
+
+	const apartNumPattern = /^\d{3}동\d{3,4}호$/;
+
+	if (!apartNumPattern.test(apartNum)) {
+		errorMessage.textContent = "동호수 입력 형식이 올바르지 않습니다. 예: 000동000호 또는 000동0000호";
+	} else {
+		errorMessage.textContent = ""; 
+	}
+}
+
 $(document).ready(function() {
-	let isUsernameAvailable = true; 
-	let isEmailAvailable = true;    
+	let isUsernameAvailable = true;
+	let isEmailAvailable = true;
 
 	// 아이디 입력 시 실시간으로 중복 확인
 	$("#username").on("blur", function() {
@@ -8,16 +27,16 @@ $(document).ready(function() {
 
 		// 아이디 값이 비어있으면 메시지 지우기
 		if (username === "") {
-			$("#idStatus").text(""); // 메시지 지우기
-			isUsernameAvailable = true; // 초기화
-			enableSignupButton(); // 버튼 활성화
+			$("#idStatus").text("");
+			isUsernameAvailable = true;
+			enableSignupButton();
 			return;
 		}
 
 		$.ajax({
-			url: "/check-username", // 서버의 아이디 중복 확인 엔드포인트
-			method: "GET", // GET 요청
-			data: { username: username }, // 아이디를 파라미터로 보냄
+			url: "/check-username", // 서버의 아이디 중복 확인 
+			method: "GET",
+			data: { username: username },
 			success: function(response) {
 				$("#idStatus").text(response);
 				if (response.includes("사용 가능")) {
@@ -25,7 +44,7 @@ $(document).ready(function() {
 				} else {
 					isUsernameAvailable = false;
 				}
-				enableSignupButton(); // 버튼 상태 변경
+				enableSignupButton();
 			},
 			error: function() {
 				alert("서버 오류로 중복 확인을 할 수 없습니다.");
@@ -33,30 +52,30 @@ $(document).ready(function() {
 		});
 	});
 
-	// 이메일 입력 시 실시간으로 중복 확인
+	// 이메일 중복 확인
 	$("#email").on("blur", function() {
-		const email = $(this).val(); // 이메일 입력값 가져오기
+		const email = $(this).val();
 
 		if (!validateEmailFormat(email)) {
 			$("#emailStatus").text("유효하지 않은 이메일 형식입니다.");
 			isEmailAvailable = false;
-			enableSignupButton(); // 버튼 상태 변경
+			enableSignupButton();
 			return;
 		}
 
 
 		// 이메일 값이 비어있으면 메시지 지우기
 		if (email === "") {
-			$("#emailStatus").text(""); // 메시지 지우기
-			isEmailAvailable = true; // 초기화
-			enableSignupButton(); // 버튼 활성화
+			$("#emailStatus").text("");
+			isEmailAvailable = true;
+			enableSignupButton();
 			return;
 		}
 
 		$.ajax({
-			url: "/check-email", // 서버의 이메일 중복 확인 엔드포인트
-			method: "GET", // GET 요청
-			data: { email: email }, // 이메일을 파라미터로 보냄
+			url: "/check-email", // 서버의 이메일 중복 확인 
+			method: "GET",
+			data: { email: email },
 			success: function(response) {
 				$("#emailStatus").text(response);
 				if (response.includes("사용 가능")) {
@@ -64,7 +83,7 @@ $(document).ready(function() {
 				} else {
 					isEmailAvailable = false;
 				}
-				enableSignupButton(); // 버튼 상태 변경
+				enableSignupButton();
 			},
 			error: function() {
 				alert("서버 오류로 중복 확인을 할 수 없습니다.");
@@ -75,19 +94,20 @@ $(document).ready(function() {
 	// 회원가입 버튼 활성화/비활성화
 	function enableSignupButton() {
 		if (isUsernameAvailable && isEmailAvailable) {
-			$(".btn-signup").prop("disabled", false); // 버튼 활성화
+			$(".btn-signup").prop("disabled", false); // 활성화
 		} else {
-			$(".btn-signup").prop("disabled", true); // 버튼 비활성화
+			$(".btn-signup").prop("disabled", true); // 비활성화
 		}
 	}
 
+
 	// 전화번호 입력 후 자동으로 '-' 추가
 	document.querySelector("input[name='phone_num']").addEventListener("input", function() {
-		let phone = this.value.replace(/[^0-9]/g, ''); // 숫자만 남기기
+		let phone = this.value.replace(/[^0-9]/g, '');
 
-		// 최대 11자리까지만 입력 가능
+		// 최대 11자리
 		if (phone.length > 11) {
-			phone = phone.slice(0, 11); // 11자리 초과하면 잘라냄
+			phone = phone.slice(0, 11);
 		}
 
 		// 10자리 전화번호
@@ -118,6 +138,6 @@ $(document).ready(function() {
 });
 
 function validateEmailFormat(email) {
-	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // 이메일 형식의 정규식
+	const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // 이메일 정규식
 	return regex.test(email);
 }

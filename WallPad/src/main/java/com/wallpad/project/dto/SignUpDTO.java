@@ -13,6 +13,7 @@ public class SignUpDTO {
 	private String password;	
 	private String name;
 	private String gender;
+	private String apartmentNumber;
 	private String phone_num;
 	private String email;
 	

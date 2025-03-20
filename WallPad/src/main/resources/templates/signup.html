@@ -12,9 +12,11 @@
 			<h2>회원가입</h2>
 			<form action="/users/insert" id="signupForm" method="POST">
 				<div class="textbox">
-					<input type="text" placeholder="아이디" name="username" id="username" required>
+					<input type="text" placeholder="아이디" name="username" id="username"
+						required>
 				</div>
-				<p id="idStatus"></p> <!-- 중복 여부 메시지 출력 -->
+				<p id="idStatus"></p>
+				<!-- 중복 여부 메시지 출력 -->
 				<div class="textbox">
 					<input type="password" placeholder="비밀번호" name="password" required>
 				</div>
@@ -25,11 +27,17 @@
 					<input type="text" placeholder="성별" name="gender" required>
 				</div>
 				<div class="textbox">
+					<input type="text" placeholder="동호수 입력 [000동000호]" name="apartmentNumber"
+						id='apartmentNumber' required onblur="validateApartNum()">
+				</div>
+				<p id="errorMessage" style="color: red;"></p>
+				<div class="textbox">
 					<input type="text" placeholder="전화번호를 ' - ' 빼고 입력" name="phone_num"
 						required>
 				</div>
 				<div class="textbox">
-					<input type="email" placeholder="이메일" name="email" id="email" required>
+					<input type="email" placeholder="이메일" name="email" id="email"
+						required>
 				</div>
 				<p id="emailStatus"></p>
 				<input type="submit" value="회원가입" class="btn-signup">
