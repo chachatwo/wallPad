@@ -34,7 +34,7 @@ body {
 	border-radius: 8px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	width: 100%;
-	height: 658px;
+	height: 100%;
 }
 
 .column-left, .column-middle, .column-right {
@@ -42,6 +42,7 @@ body {
 	flex-direction: column;
 	justify-content: flex-start; /* 콘텐츠가 위로 쌓이도록 설정 */
 	gap: 15px;
+	height: 610px;
 }
 
 .dashboard-widget {
@@ -49,6 +50,7 @@ body {
 	padding: 15px;
 	border-radius: 8px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	height: 100%;
 }
 
 .dashboard-widget h2 {
@@ -80,18 +82,43 @@ body {
 	border-radius: 5px;
 	cursor: pointer;
 	text-align: center;
-	font-size: 14px;
-	width:100%;
+	font-size: 16px;
+	width: 100%;
+	margin-top: 10px;
 }
 
 .action-button:hover {
-	background-color: rgb(198, 187, 198); /* 하늘색의 더 진한 색으로 hover */
+	background-color: rgb(198, 187, 198);
 }
 
-/* 모바일에서 3열을 1열로 변경 */
+.footer-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	position: relative;
+}
+
+.copyright {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
+}
+
+.logout-button {
+	position: absolute;
+	right: -90px; /* 버튼을 오른쪽 끝으로 배치 */
+	background-color: #0080ff; /* 버튼 배경색 */
+	border: none; /* 테두리 제거 */
+	color: white; /* 텍스트 색 */
+	padding: 5px;
+	cursor: pointer; /* 마우스 커서 */
+}
+
 @media ( max-width : 1024px) {
 	.dashboard-container {
-		grid-template-columns: 1fr; /* 1열로 변경 */
+		grid-template-columns: 1fr;
 	}
 	.column-left, .column-middle, .column-right {
 		gap: 20px;
@@ -106,6 +133,9 @@ body {
 	.dashboard-container {
 		grid-template-columns: 1fr;
 		gap: 10px;
+	}
+	.logout-button {
+		right: 20px;
 	}
 }
 
@@ -185,21 +215,21 @@ strong {
 
 .location {
 	display: flex;
-	align-items: center; 
+	align-items: center;
 }
 
 #locationPin {
-	margin-right: 3px; 
+	margin-right: 3px;
 	margin-bottom: 20px;
-}  
+}
 
-#temperature{
+#temperature {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 15px;
 	font-weight: bold;
 }
 
-#airQualityText{
+#airQualityText {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 14px;
 	font-weight: bold;

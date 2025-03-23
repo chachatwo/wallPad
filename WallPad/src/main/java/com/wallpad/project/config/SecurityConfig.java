@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)  
             .and()
             .logout()
-                .logoutSuccessUrl("/logout")
+                .logoutSuccessUrl("/login")
                 .permitAll();
 
         return http.build();

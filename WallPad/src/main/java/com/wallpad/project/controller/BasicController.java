@@ -7,6 +7,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +42,18 @@ public class BasicController {
 	public String Login(Model model) {
 		return "login";
 	}
+
+		@GetMapping("/logout")
+		public String logout(HttpSession session, HttpServletResponse response) {
+			session.invalidate();
+	
+			Cookie cookie = new Cookie("JSESSIONID", null);
+			cookie.setMaxAge(0);
+			cookie.setPath("/");
+			response.addCookie(cookie);
+	
+			return "redirect:/login";
+		}
 
 	@GetMapping("/notices")
 	public String getNotices(Model model) {
@@ -80,15 +96,14 @@ public class BasicController {
 
 		model.addAttribute("repair", repair);
 
-		
 		List<ReserveStatesDTO> reserve = apiService.reserveStates();
-		
+
 		if (reserve.size() > 3) {
 			reserve = reserve.subList(0, 3);
 		}
 
 		model.addAttribute("reserve", reserve);
-		
+
 		return "dashboard";
 	}
 

@@ -96,6 +96,7 @@ public class RestController {
 				if (signUpDTO != null && signUpDTO.getEmail().equals(email)) {
 					apiService.saveUserData(signUpDTO); 
 					authService.updateEmailVerified(email); 
+					session.removeAttribute("signUpDTO");
 
 					redirectView.setUrl("/login");
 				} else {
