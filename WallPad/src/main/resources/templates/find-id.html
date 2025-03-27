@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>아이디 찾기</title>
+<link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+	<div class="login-container">
+		<div class="login-box">
+			<h2>아이디 찾기</h2>
+			<p>가입 시 등록한 이메일을 입력해주세요.</p>
+			<form action="/find-id" method="post">
+				<div class="textbox">
+					<input type="email" name="email" placeholder="이메일" required />
+				</div>
+				<input type="submit" value="아이디 찾기" class="btn-login" />
+			</form>
+			<div class="signup-link">
+				<p>
+					<a href="/login">로그인으로 돌아가기</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

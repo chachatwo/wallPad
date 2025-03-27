@@ -15,6 +15,71 @@
 		WHERE email = #{email}
 	</select>
 
+	<select id="findByEmail" parameterType="string"
+		resultType="com.wallpad.project.dto.UserDTO">
+		SELECT * FROM users WHERE email = #{email}
+	</select>
+
+	<select id="findByUsernameAndEmail"
+		parameterType="com.wallpad.project.dto.ResetTokenDTO"
+		resultType="com.wallpad.project.dto.UserDTO">
+		SELECT
+		id,
+		username,
+		password,
+		name,
+		gender,
+		apartmentNumber,
+		phone_num,
+		email,
+		reset_token AS resetToken,
+		token_expire_at AS expireAt
+		FROM users
+		WHERE username = #{username}
+		AND email = #{email}
+	</select>
+
+	<update id="updateResetToken"
+		parameterType="com.wallpad.project.dto.ResetTokenDTO">
+		UPDATE users
+		SET reset_token = #{resetToken},
+		token_expire_at = #{expireAt}
+		WHERE username = #{username}
+		AND email = #{email}
+	</update>
+
+	<select id="findByResetToken" parameterType="string"
+		resultType="com.wallpad.project.dto.UserDTO">
+		SELECT
+		id,
+		username,
+		password,
+		name,
+		gender,
+		apartmentNumber,
+		phone_num,
+		email,
+		reset_token AS resetToken,
+		token_expire_at AS expireAt
+		FROM users
+		WHERE reset_token = #{token}
+	</select>
+
+	<update id="updatePassword"
+		parameterType="com.wallpad.project.dto.UserDTO">
+		UPDATE users
+		SET password = #{password}
+		WHERE id = #{id}
+	</update>
+
+	<update id="clearResetToken" parameterType="int">
+		UPDATE users
+		SET reset_token = NULL,
+		token_expire_at = NULL
+		WHERE id = #{id}
+	</update>
+
+
 
 	<insert id="saveUserData"
 		parameterType="com.wallpad.project.dto.SignUpDTO">
@@ -42,7 +107,8 @@
 
 	<select id="checkUserByEmail" resultType="int">
 		SELECT COUNT(*)
-		FROM users
+		FROM
+		users
 		WHERE email = #{email}
 	</select>
 
@@ -56,6 +122,13 @@
 	</update>
 
 	<select id="findByUsername" parameterType="String"
+		resultType="com.wallpad.project.dto.UserDTO">
+		SELECT username, password, name, gender, phone_num, email
+		FROM users
+		WHERE username = #{username}
+	</select>
+
+	<select id="findUserByUsername" parameterType="string"
 		resultType="com.wallpad.project.dto.UserDTO">
 		SELECT username, password, name, gender, phone_num, email
 		FROM users

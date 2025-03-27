@@ -11,6 +11,7 @@ import com.wallpad.project.dto.ParkingReserveDTO;
 import com.wallpad.project.dto.RepairImageDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
 import com.wallpad.project.dto.ReserveStatesDTO;
+import com.wallpad.project.dto.ResetTokenDTO;
 import com.wallpad.project.dto.SignUpDTO;
 import com.wallpad.project.dto.UserDTO;
 
@@ -18,7 +19,7 @@ import com.wallpad.project.dto.UserDTO;
 public interface ApiMapper {
 
 	int checkUserByEmail(String email);
-	
+
 	int saveUserData(SignUpDTO signUpDTO);
 
 	void updateEmailVerified(String email);
@@ -29,32 +30,45 @@ public interface ApiMapper {
 
 	UserDTO findByUsername(String username);
 
+	UserDTO findUserByUsername(String username);
+
+	UserDTO findByEmail(String username);
+
+	UserDTO findByUsernameAndEmail(ResetTokenDTO resetTokenDTO);
+
+	void updateResetToken(ResetTokenDTO resetTokenDTO);
+
+	UserDTO findByResetToken(String token);
+
+	void updatePassword(UserDTO userDTO);
+
+	void clearResetToken(int userId);
+
 	List<NoticeDTO> findAllNotices();
-	
+
 	List<NoticeDTO> findRecentNotices();
-	
+
 	List<MaintenanceScheduleDTO> maintenanceSchedules();
-	
+
 	void saveRepairRequest(RepairRequestDTO repairRequestDTO);
-	
+
 	List<RepairRequestDTO> findRepairRequest();
-	
+
 	int getLastInsertedId();
-	
+
 	void saveImage(RepairImageDTO repairImageDTO);
-	
-	
+
 	ParkingReserveDTO findByCarNumber(String carNumber);
-	
+
 	int saveParkingReserve(ParkingReserveDTO parkingReserveDTO);
-	
+
 	int updateParkingReserve(ParkingReserveDTO parkingReserveDTO);
-	
+
 	List<ReserveStatesDTO> reserveStates();
-	
+
 	void insertEntryCar(EntryCarDTO entryCarDTO);
-	
+
 	EntryCarDTO findCarNumber(String carNumber);
-	
+
 	List<EntryCarDTO> parkingStates();
 }

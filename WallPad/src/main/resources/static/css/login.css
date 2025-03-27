@@ -32,6 +32,20 @@ body {
 	text-align: center;
 }
 
+.btn-login {
+	display: inline-block;
+	margin-top: 30px; 
+	padding: 10px 20px; 
+	font-size: 10px;
+	color: white;
+	border: none;
+	cursor: pointer;
+}
+
+.btn-login:hover {
+	background-color: #45a049;
+}
+
 /* 헤더 스타일 */
 h2 {
 	margin-bottom: 20px;
@@ -47,11 +61,11 @@ h2 {
 .textbox input {
 	width: 100%;
 	padding: 10px;
-	margin: 10px 0;
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	font-size: 16px;
 }
+
 
 /* 로그인 버튼 */
 .btn-login {
@@ -71,12 +85,12 @@ h2 {
 }
 
 /* '기억하기' 체크박스 */
-.remember-me {
+.remember {
 	text-align: left;
 	margin-bottom: 20px;
 }
 
-.remember-me input {
+.remember input {
 	margin-right: 10px;
 }
 

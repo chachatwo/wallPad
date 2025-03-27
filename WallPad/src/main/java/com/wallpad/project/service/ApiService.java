@@ -33,6 +33,7 @@ import com.wallpad.project.dto.RepairImageDTO;
 import com.wallpad.project.dto.RepairRequestDTO;
 import com.wallpad.project.dto.ReserveStatesDTO;
 import com.wallpad.project.dto.SignUpDTO;
+import com.wallpad.project.dto.UserDTO;
 import com.wallpad.project.mapper.ApiMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -64,6 +65,7 @@ public class ApiService {
 		int count = apiMapper.emailCheck(email);
 		return count == 0;
 	}
+
 
 	public List<NoticeDTO> findAllNotices() {
 		List<NoticeDTO> notices = apiMapper.findAllNotices();
@@ -120,8 +122,7 @@ public class ApiService {
 						String imagePath = "images/" + imageName;
 
 						BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, imagePath)
-								.setContentType(imageUpload.getContentType()) 
-								.build();
+								.setContentType(imageUpload.getContentType()).build();
 
 						Blob blob = storage.create(blobInfo, imageUpload.getInputStream());
 

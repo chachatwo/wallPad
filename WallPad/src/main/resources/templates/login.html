@@ -15,14 +15,15 @@
 			</div>
 			<form action="/login" method="POST">
 				<div class="textbox">
-					<input type="text" placeholder="아이디" name="username" required>
+					<input type="text" id="logId" placeholder="아이디" name="username"
+						th:value="${savedId != null} ? ${savedId} : ''" required>
 				</div>
 				<div class="textbox">
 					<input type="password" placeholder="비밀번호" name="password" required>
 				</div>
-				<div class="remember-me">
-					<label> <input type="checkbox" name="remember">
-						기억하기
+				<div class="remember">
+					<label> <input type="checkbox" name="rememberMe"
+						th:checked="${rememberMeChecked}"> 기억하기
 					</label>
 				</div>
 				<input type="submit" value="로그인" class="btn-login">
@@ -31,8 +32,17 @@
 						계정이 없으신가요? <a href="/signup">회원가입</a>
 					</p>
 				</div>
+				<div class="find-link">
+					<p>
+						<a href="/find-id">아이디 찾기</a> | <a href="/find-password">비밀번호
+							찾기</a>
+					</p>
+				</div>
 			</form>
 		</div>
 	</div>
+
+	<!-- 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+	<!-- 	<script src="js/login.js"></script> -->
 </body>
 </html>
