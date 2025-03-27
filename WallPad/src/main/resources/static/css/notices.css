@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+#content {
+	min-height: 600px;
+}
+
+.container-fluid {
+	padding-bottom: 20px;
+}
+
 .nav-link {
 	display: block;
 	padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
@@ -71,9 +79,8 @@
 		flex-direction: column;
 		width: 100%;
 	}
-	
 	#sideNav .navbar-nav .nav-item .nav-link {
-		font-size: 25px; 
+		font-size: 25px;
 		margin-top: 3px;
 	}
 }
@@ -88,6 +95,12 @@
 }
 
 @media ( max-width : 991px) {
+	#content {
+		min-height: 600px;
+	}
+	.container-fluid {
+		padding-bottom: 20px;
+	}
 	#content-wrapper {
 		margin-left: 0;
 	}
@@ -164,15 +177,15 @@
 }
 
 .card-header {
-    background-color: rgb(78, 115, 223) !important;
-    color: white !important;
-    font-size: 30px;
-    font-weight: bold;
-    padding-top: 20px;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    height: 70px;
+	background-color: rgb(78, 115, 223) !important;
+	color: white !important;
+	font-size: 30px;
+	font-weight: bold;
+	padding-top: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 70px;
 }
 
 .card-body {
@@ -203,6 +216,41 @@
 
 .card-header .input-group-append button {
 	border-radius: 0;
+}
+
+.footer-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	position: relative;
+}
+
+.copyright {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
+}
+
+.logout-button {
+	position: fixed; /* 화면 기준 고정 */
+	bottom: 20px;
+	right: 30px;
+	background: none;
+	border: none;
+	font-size: 16px;
+	color: #333;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	transition: color 0.2s ease;
+	z-index: 9999; /* 겹침 방지 */
+}
+
+.logout-button:hover {
+	color: #007bff;
 }
 
 @media ( max-width : 991px) {

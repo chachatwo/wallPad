@@ -46,7 +46,8 @@ body {
 }
 
 .dashboard-widget {
-	background-color: #e6fffe;
+	background: linear-gradient(to bottom, #e6fffe, #ffffff);
+	border: 1px solid #c9f0f0;
 	padding: 15px;
 	border-radius: 8px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -74,29 +75,35 @@ body {
 }
 
 /* 페이지 이동 버튼 스타일 */
+/* 버튼을 위젯처럼 보이게 */
 .action-button {
-	padding: 10px 15px;
-	background-color: rgb(164, 209, 255);
-	color: white;
-	border: none;
-	border-radius: 5px;
+	padding: 12px 15px;
+	background-color: #ffffff;
+	color: #004b7c;
+	border: 1px solid #cce5f6;
+	border-radius: 10px;
 	cursor: pointer;
 	text-align: center;
 	font-size: 16px;
+	font-weight: bold;
 	width: 100%;
 	margin-top: 10px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); /* 👉 그림자 추가 */
+	transition: all 0.25s ease;
 }
 
 .action-button:hover {
-	background-color: rgb(198, 187, 198);
+	background-color: #f4faff;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12); /* 👉 hover 시 더 진한 그림자 */
 }
 
 .footer-container {
+	position: relative; /* 내부 버튼 위치 기준 */
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 50px;
-	position: relative;
+	height: 60px;
 }
 
 .copyright {
@@ -108,12 +115,26 @@ body {
 
 .logout-button {
 	position: absolute;
-	right: -90px; /* 버튼을 오른쪽 끝으로 배치 */
-	background-color: #0080ff; /* 버튼 배경색 */
-	border: none; /* 테두리 제거 */
-	color: white; /* 텍스트 색 */
-	padding: 5px;
-	cursor: pointer; /* 마우스 커서 */
+	bottom: 10px;
+	right: -90px; /* 기존보다 더 오른쪽으로 */
+	margin-right: 10px; /* 약간의 여백 */
+	background: none;
+	border: none;
+	font-size: 16px;
+	color: #333;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	transition: color 0.2s ease;
+}
+
+.logout-button i {
+	font-size: 18px;
+}
+
+.logout-button:hover {
+	color: #007bff;
 }
 
 @media ( max-width : 1024px) {
@@ -233,4 +254,52 @@ strong {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 14px;
 	font-weight: bold;
+}
+
+/* 날짜/시간 강조 */
+#currentDate {
+	font-size: 26px;
+	font-weight: 600;
+	color: #444;
+	font-family: 'Montserrat', sans-serif;
+}
+
+/* 날씨, 미세먼지 텍스트 스타일 */
+#weather, #airQuality {
+	font-size: 18px;
+	font-weight: 500;
+	color: #222;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* 위젯 카드 hover 효과 */
+.dashboard-widget:hover {
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
+	transition: all 0.2s ease;
+}
+
+/* 리스트 항목 hover 시 배경 강조 */
+.dashboard-widget ul li:hover {
+	background-color: #f1fbff;
+	cursor: pointer;
+}
+
+/* 날씨 영역 배경에 그라데이션 추가 */
+.column-left .dashboard-widget {
+	background: linear-gradient(to bottom, #e6fffe, #ffffff);
+	border: 1px solid #c9f0f0;
+}
+
+/* 푸터 스타일 subtle하게 정리 */
+.sticky-footer {
+	border-top: 1px solid #ddd;
+	background-color: #fdfdfd;
+}
+
+/* SUIT 폰트 적용 (선택사항) */
+body {
+	font-family: 'SUIT', sans-serif;
 }

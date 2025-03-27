@@ -1,6 +1,14 @@
 /* 기본 스타일 */
 @charset "UTF-8";
 
+#content {
+	min-height: 630px;
+}
+
+.container-fluid {
+	padding-bottom: 20px;
+}
+
 .nav-link {
 	display: block;
 	padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
@@ -43,6 +51,11 @@
 	text-transform: uppercase;
 }
 
+.navbar-dark {
+	--bs-navbar-color: rgba(255, 255, 255, 0.55);
+}
+
+/* 데스크탑용 */
 @media ( min-width : 992px) {
 	#sideNav {
 		padding-left: 0;
@@ -53,7 +66,7 @@
 		left: 0;
 		display: flex;
 		flex-direction: column;
-		width: 17rem; /* 사이드바 너비 */
+		width: 17rem;
 		height: 100vh;
 	}
 	#sideNav .navbar-brand {
@@ -76,20 +89,22 @@
 		font-size: 25px;
 		margin-top: 3px;
 	}
+	#content-wrapper {
+		margin-left: 17rem;
+	}
 }
 
-.navbar-dark {
-	--bs-navbar-color: rgba(255, 255, 255, 0.55);
-}
-
-/* 사이드바가 콘텐츠 영역에 영향을 미치지 않도록 #content-wrapper에 여백 추가 */
-#content-wrapper {
-	margin-left: 17rem;
-}
-
+/* 모바일/태블릿용 */
 @media ( max-width : 991px) {
+	#content {
+		min-height: 570px;
+	}
+	.container-fluid {
+		padding-bottom: 20px;
+	}
 	#content-wrapper {
 		margin-left: 0;
+		margin-top: 10px;
 	}
 	#sideNav {
 		width: 100%;
@@ -99,6 +114,21 @@
 		flex-direction: row;
 		justify-content: space-between;
 		width: 100%;
+	}
+	.card-header {
+		padding-top: 60px;
+	}
+	.card-header .navbar-search {
+		display: flex;
+		justify-content: center;
+		width: 50%;
+	}
+	.card-body .button-container {
+		justify-content: center;
+		gap: 5px;
+	}
+	.navbar-collapse {
+		z-index: 1050;
 	}
 }
 
@@ -205,16 +235,6 @@
 	border-radius: 0;
 }
 
-@media ( max-width : 991px) {
-	.card-header {
-		padding-top: 60px;
-	}
-	.card-header .navbar-search {
-		width: 50%;
-		justify-content: center;
-	}
-}
-
 #dataTable_wrapper .dataTables_length select, #dataTable_wrapper .dataTables_filter input
 	{
 	border-radius: 5px;
@@ -243,13 +263,8 @@
 	text-decoration: none;
 }
 
-#dataTable_paginate .paginate_button:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:hover
-	{
-	background-color: rgb(78, 115, 223);
-	color: white !important;
-}
-
-#dataTable_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover
+#dataTable_paginate .paginate_button:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+	#dataTable_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover
 	{
 	background-color: rgb(78, 115, 223);
 	color: white !important;
@@ -261,30 +276,10 @@
 	margin-top: 10px;
 }
 
-@media ( max-width : 991px) {
-	.card-header {
-		padding-top: 60px;
-	}
-	.navbar-collapse {
-		z-index: 1050;
-	}
-	#content-wrapper {
-		margin-top: 0;
-	}
-	#content-wrapper {
-		margin-top: 10px;
-	}
-	.card-header .navbar-search {
-		display: flex;
-		justify-content: flex-end;
-		width: 20%;
-	}
-}
-
 .button-container {
 	display: flex;
-	justify-content: flex-end; /* 버튼을 오른쪽으로 정렬 */
-	gap: 7px; /* 버튼들 간 간격을 살짝 줌 */
+	justify-content: flex-end;
+	gap: 7px;
 	margin-top: 10px;
 }
 
@@ -297,33 +292,24 @@
 	cursor: pointer;
 }
 
-/* 버튼들이 작은 화면에서도 잘 배치되도록 */
-@media ( max-width : 991px) {
-	.card-body .button-container {
-		justify-content: center; /* 화면이 좁으면 가운데 정렬 */
-		gap: 5px;
-	}
-}
-
 .modal {
-	display: none; 
-	position: fixed; 
-	z-index: 1; 
+	display: none;
+	position: fixed;
+	z-index: 1;
 	left: 0;
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5); 
+	background-color: rgba(0, 0, 0, 0.5);
 }
-
 
 .modal-content {
 	background-color: #fff;
 	margin: 15% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 80%; 
-	max-width: 500px; 
+	width: 80%;
+	max-width: 500px;
 	border-radius: 8px;
 }
 
@@ -339,27 +325,23 @@
 	margin: 0;
 }
 
-/* 차량번호 입력 필드 */
 .modal-body .form-control {
 	padding: 10px;
 	width: 100%;
 	margin-bottom: 15px;
 }
 
-/* 라디오 버튼 스타일 */
 .modal-body input[type="radio"] {
 	margin-right: 2px;
 	margin-bottom: 10px;
 }
 
-/* 출입기간 라벨 */
 .modal-body .form-label {
 	font-size: 1rem;
 	color: #555;
 	margin-bottom: 5px;
 }
 
-/* 예약하기 버튼 */
 .modal-body .btn-primary {
 	background-color: rgb(78, 115, 223);
 	color: white;
@@ -368,7 +350,6 @@
 	cursor: pointer;
 	margin-top: 5px;
 }
-
 
 button {
 	padding: 10px 20px;
@@ -383,19 +364,50 @@ button:hover {
 	background-color: #0056b3;
 }
 
-.table-responsive {
-	overflow-x: auto;
+.footer-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	position: relative;
+}
+
+.copyright {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
+}
+
+.logout-button {
+	position: fixed;
+	bottom: 20px;
+	right: 30px;
+	background: none;
+	border: none;
+	font-size: 16px;
+	color: #333;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	transition: color 0.2s ease;
+	z-index: 9999;
+}
+
+.logout-button:hover {
+	color: #007bff;
 }
 
 #reserveStatusTable {
-	max-height: 400px; 
-	overflow-y: auto; 
-	display: block; 
+	max-height: 400px;
+	overflow-y: auto;
+	display: block;
 }
 
 #reserveStatusTable thead {
 	position: sticky;
 	top: 0;
-	background-color: rgb(78, 115, 223); 
-	z-index: 1; /* 헤더가 다른 콘텐츠 위에 올 수 있도록 */
+	background-color: rgb(78, 115, 223);
+	z-index: 1;
 }

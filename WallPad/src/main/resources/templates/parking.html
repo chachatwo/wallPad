@@ -21,180 +21,184 @@
 </head>
 
 <body id="page-top">
-	<!-- 네비게이션-->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top"
-		id="sideNav">
-		<a class="navbar-brand js-scroll-trigger" href="#page-top">메뉴</a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-			data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
-			aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarResponsive">
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link"
-					href="http://localhost:8080/dashboard">메인화면</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="http://localhost:8080/notices">공지사항</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="http://localhost:8080/schedule">주요일정</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="http://localhost:8080/repair">하자보수</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="http://localhost:8080/parking">주차관제</a></li>
-			</ul>
+	<div class="page-wrapper">
+		<!-- 네비게이션-->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top"
+			id="sideNav">
+			<a class="navbar-brand js-scroll-trigger" href="#page-top">메뉴</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+				aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link"
+						href="http://localhost:8080/dashboard">메인화면</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="http://localhost:8080/notices">공지사항</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="http://localhost:8080/schedule">주요일정</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="http://localhost:8080/repair">하자보수</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="http://localhost:8080/parking">주차관제</a></li>
+				</ul>
+			</div>
+		</nav>
+		<!-- 네비게이션 끝-->
+
+		<div id="wrapper">
+			<div id="content-wrapper">
+				<!-- 테이블 시작 -->
+				<div id="content">
+					<div class="container-fluid">
+						<div class="card shadow">
+							<div class="card-header">주차관제</div>
+							<div class="card-body">
+								<div>
+									<p th:if="${message}" th:text="${message}"
+										style="display: none;" id="hiddenMessage"></p>
+								</div>
+								<div class="table-responsive">
+									<table class="table table-bordered" id="parkingTable"
+										width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												<th>입차시간</th>
+												<th>차량번호</th>
+												<th>상태</th>
+											</tr>
+										</thead>
+										<tbody id="parkingTableBody">
+											<tr th:each="car : ${parking}">
+												<td
+													th:text="${#dates.format(car.entryTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+												<td th:text="${car.carNumber}"></td>
+												<td>입차</td>
+											</tr>
+
+
+											<tr th:if="${#lists.isEmpty(parking)}">
+												<td colspan="3" class="text-center">현재 출입한 차량이 없습니다.</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="button-container">
+								<button onclick="openModal()">방문차량예약</button>
+								<button id="statusButton" onclick="openModal2()">예약현황조회</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 테이블 끝 -->
+				<!-- Footer 시작 -->
+				<div>
+					<footer class="sticky-footer bg-white">
+						<div class="container my-auto footer-container">
+							<div class="copyright">
+								<span>Hello! Your Family WallPad</span>
+							</div>
+						</div>
+					</footer>
+				</div>
+				<!-- Footer 끝 -->
+			</div>
 		</div>
-	</nav>
-	<!-- 네비게이션 끝-->
 
-	<div id="wrapper">
-		<div id="content-wrapper">
-			<!-- 테이블 시작 -->
-			<div id="content">
-				<div class="container-fluid">
-					<div class="card shadow">
-						<div class="card-header">주차관제</div>
-						<div class="card-body">
+		<script
+			src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+		<script src="js/parking.js"></script>
+
+
+
+
+		<div class="modal" id="reserveModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">방문차량 예약</h5>
+						<button type="button" class="btn-close" onclick="closeModal()"></button>
+					</div>
+					<div class="modal-body">
+						<form id="reserveForm" action="/api/parking/reserve" method="POST"
+							onsubmit="return validateCarNumber()">
 							<div>
-								<p th:if="${message}" th:text="${message}"
-									style="display: none;" id="hiddenMessage"></p>
+								<label for="carNumber" class="form-label">차량번호</label> <input
+									type="text" class="form-control" id="carNumber"
+									name="carNumber" placeholder="차량번호를 입력하세요(예시: 00나0000)"
+									required> <span id="carNumberError"
+									style="color: red; display: none;">올바른 차량번호를 입력하세요(예시:
+									00나0000)</span>
 							</div>
-							<div class="table-responsive">
-								<table class="table table-bordered" id="parkingTable"
-									width="100%" cellspacing="0">
-									<thead>
-										<tr>
-											<th>입차시간</th>
-											<th>차량번호</th>
-											<th>상태</th>
-										</tr>
-									</thead>
-									<tbody id="parkingTableBody">
-										<tr th:each="car : ${parking}">
-											<td
-												th:text="${#dates.format(car.entryTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
-											<td th:text="${car.carNumber}"></td>
-											<td>입차</td>
-										</tr>
-
-
-										<tr th:if="${#lists.isEmpty(parking)}">
-											<td colspan="3" class="text-center">현재 출입한 차량이 없습니다.</td>
-										</tr>
-									</tbody>
-								</table>
+							<div>
+								<label for="allowedPeriod" class="form-label">출입기간</label>
+								<div>
+									<input type="radio" id="btnOneDay" name="allowedPeriod"
+										value="1" required> <label for="btnOneDay">1일</label>
+									<input type="radio" id="btnThreeDay" name="allowedPeriod"
+										value="3"> <label for="btnThreeDay">3일</label>
+								</div>
 							</div>
-						</div>
-						<div class="button-container">
-							<button onclick="openModal()">방문차량예약</button>
-							<button id="statusButton" onclick="openModal2()">예약현황조회</button>
-						</div>
+							<div class="text-center">
+								<button type="submit" class="btn btn-primary">예약하기</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
-			<!-- 테이블 끝 -->
-			<!-- Footer 시작 -->
-			<footer class="sticky-footer bg-white">
-				<div class="container my-auto">
-					<div class="copyright text-center my-auto">
-						<br> <span>Hello! Your Family WallPad</span>
-					</div>
-				</div>
-			</footer>
-			<!-- Footer 끝 -->
 		</div>
-	</div>
-
-	<script
-		src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-
-	<script src="js/parking.js"></script>
 
 
-
-
-	<div class="modal" id="reserveModal" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog">
+		<div id="messageModal" class="modal">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">방문차량 예약</h5>
-					<button type="button" class="btn-close" onclick="closeModal()"></button>
+					<button type="button" class="btn-close" onclick="closeModal2()"></button>
 				</div>
-				<div class="modal-body">
-					<form id="reserveForm" action="/api/parking/reserve" method="POST"
-						onsubmit="return validateCarNumber()">
-						<div>
-							<label for="carNumber" class="form-label">차량번호</label> <input
-								type="text" class="form-control" id="carNumber" name="carNumber"
-								placeholder="차량번호를 입력하세요(예시: 00나0000)" required> <span
-								id="carNumberError" style="color: red; display: none;">올바른
-								차량번호를 입력하세요(예시: 00나0000)</span>
-						</div>
-						<div>
-							<label for="allowedPeriod" class="form-label">출입기간</label>
-							<div>
-								<input type="radio" id="btnOneDay" name="allowedPeriod"
-									value="1" required> <label for="btnOneDay">1일</label> <input
-									type="radio" id="btnThreeDay" name="allowedPeriod" value="3">
-								<label for="btnThreeDay">3일</label>
-							</div>
-						</div>
-						<div class="text-center">
-							<button type="submit" class="btn btn-primary">예약하기</button>
-						</div>
-					</form>
-				</div>
+				<p id="modalMessage"></p>
 			</div>
 		</div>
-	</div>
-
-
-	<div id="messageModal" class="modal">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="btn-close" onclick="closeModal2()"></button>
-			</div>
-			<p id="modalMessage"></p>
-		</div>
-	</div>
 
 
 
-	<div class="modal" id="statusModal" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">예약현황 조회</h5>
-					<button type="button" class="btn-close" onclick="closeModal3()"></button>
-				</div>
-				<div class="modal-body">
-					<div class="table-responsive">
-						<table class="table table-bordered" id="reserveStatusTable"
-							width="100%" cellspacing="0">
-							<thead>
-								<tr>
-									<th>차량번호</th>
-									<th>출입기간(까지)</th>
-								</tr>
-							</thead>
-							<tbody id="reserveStatusTableBody">
+		<div class="modal" id="statusModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">예약현황 조회</h5>
+						<button type="button" class="btn-close" onclick="closeModal3()"></button>
+					</div>
+					<div class="modal-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" id="reserveStatusTable"
+								width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th>차량번호</th>
+										<th>출입기간(까지)</th>
+									</tr>
+								</thead>
+								<tbody id="reserveStatusTableBody">
 
 
 
-							</tbody>
-						</table>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
 </body>
 </html>
