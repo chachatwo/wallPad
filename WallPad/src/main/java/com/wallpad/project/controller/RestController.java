@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -94,13 +96,13 @@ public class RestController {
 				SignUpDTO signUpDTO = (SignUpDTO) session.getAttribute("signUpDTO");
 
 				if (signUpDTO != null && signUpDTO.getEmail().equals(email)) {
-					apiService.saveUserData(signUpDTO); 
-					authService.updateEmailVerified(email); 
+					apiService.saveUserData(signUpDTO);
+					authService.updateEmailVerified(email);
 					session.removeAttribute("signUpDTO");
 
 					redirectView.setUrl("/login");
 				} else {
-					redirectView.setUrl("/error"); 
+					redirectView.setUrl("/error");
 				}
 			} else {
 				redirectView.setUrl("/error");
@@ -120,23 +122,39 @@ public class RestController {
 	}
 
 	@PostMapping("/api/repair")
-	public void submitRequest(@RequestParam("apartmentNumber") String apartmentNumber,
-			@RequestParam("majorCategory") String majorCategory, @RequestParam("middleCategory") String middleCategory,
-			@RequestParam("lastCategory") String lastCategory, @RequestParam("request") String request,
+	public void submitRequest(@RequestParam("majorCategory") String majorCategory,
+			@RequestParam("middleCategory") String middleCategory, @RequestParam("lastCategory") String lastCategory,
+			@RequestParam("request") String request,
 			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads,
-			HttpServletResponse response) throws IOException {
+			HttpServletRequest requestObj, HttpServletResponse response) throws IOException {
 
-		if (imageUploads != null) {
-			System.out.println("업로드된 이미지 개수: " + imageUploads.length);
+		// 1. saveid 쿠키 추출
+		String savedId = null;
+		Cookie[] cookies = requestObj.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("saveid".equals(cookie.getName())) {
+					savedId = cookie.getValue();
+					break;
+				}
+			}
 		}
-
-		RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
-		repairRequestDTO.setApartmentNumber(apartmentNumber);
-		repairRequestDTO.setMajorCategory(majorCategory);
-		repairRequestDTO.setMiddleCategory(middleCategory);
-		repairRequestDTO.setLastCategory(lastCategory);
-		repairRequestDTO.setRequest(request);
-
+		
+	    // 2. 동호수 조회
+	    String apartmentNumber = null;
+	    if (savedId != null) {
+	        apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
+	    }
+		
+	    // 3. 요청 DTO 생성 및 세팅
+	    RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
+	    repairRequestDTO.setApartmentNumber(apartmentNumber);
+	    repairRequestDTO.setMajorCategory(majorCategory);
+	    repairRequestDTO.setMiddleCategory(middleCategory);
+	    repairRequestDTO.setLastCategory(lastCategory);
+	    repairRequestDTO.setRequest(request);
+	    
+	    // 4. 저장
 		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
 
 		response.sendRedirect("/repair");

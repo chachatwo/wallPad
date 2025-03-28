@@ -66,7 +66,6 @@ public class ApiService {
 		return count == 0;
 	}
 
-
 	public List<NoticeDTO> findAllNotices() {
 		List<NoticeDTO> notices = apiMapper.findAllNotices();
 
@@ -140,6 +139,10 @@ public class ApiService {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public String findApartmentNumberBySavedId(String savedId) {
+		return apiMapper.findApartmentNumberBySavedId(savedId);
 	}
 
 	public List<RepairRequestDTO> findRepairRequest() {

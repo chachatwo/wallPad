@@ -45,7 +45,8 @@
 		SET reset_token = #{resetToken},
 		token_expire_at = #{expireAt}
 		WHERE username = #{username}
-		AND email = #{email}
+		AND email =
+		#{email}
 	</update>
 
 	<select id="findByResetToken" parameterType="string"
@@ -74,7 +75,8 @@
 
 	<update id="clearResetToken" parameterType="int">
 		UPDATE users
-		SET reset_token = NULL,
+		SET
+		reset_token = NULL,
 		token_expire_at = NULL
 		WHERE id = #{id}
 	</update>
@@ -181,6 +183,12 @@
 		)
 	</insert>
 
+	<select id="findApartmentNumberBySavedId" resultType="String">
+		SELECT apartmentNumber
+		FROM users
+		WHERE username = #{savedId}
+	</select>
+
 	<select id="findRepairRequest"
 		resultType="com.wallpad.project.dto.RepairRequestDTO">
 		SELECT
@@ -198,14 +206,12 @@
 
 
 
-	<!-- 마지막으로 삽입된 수리 요청 ID 조회 -->
 	<select id="getLastInsertedId" resultType="int">
 		SELECT
 		LAST_INSERT_ID()
 	</select>
 
 
-	<!-- 이미지 정보 저장 -->
 	<insert id="saveImage"
 		parameterType="com.wallpad.project.dto.RepairImageDTO">
 		INSERT INTO repair_image (

@@ -49,6 +49,8 @@ public interface ApiMapper {
 	List<NoticeDTO> findRecentNotices();
 
 	List<MaintenanceScheduleDTO> maintenanceSchedules();
+	
+	String findApartmentNumberBySavedId(String savedId);
 
 	void saveRepairRequest(RepairRequestDTO repairRequestDTO);
 
