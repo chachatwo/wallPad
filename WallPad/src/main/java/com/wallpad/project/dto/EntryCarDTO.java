@@ -13,5 +13,6 @@ import lombok.Setter;
 public class EntryCarDTO {
 	private String carNumber;
 	private Timestamp entryTime;
+	private String apartmentNumber;
 }
 

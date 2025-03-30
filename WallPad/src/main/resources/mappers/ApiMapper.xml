@@ -184,7 +184,8 @@
 	</insert>
 
 	<select id="findApartmentNumberBySavedId" resultType="String">
-		SELECT apartmentNumber
+		SELECT
+		apartmentNumber
 		FROM users
 		WHERE username = #{savedId}
 	</select>
@@ -223,20 +224,25 @@
 	</insert>
 
 
-	<select id="findByCarNumber" parameterType="String"
+	<select id="findByCarNumber"
+		parameterType="com.wallpad.project.dto.ParkingReserveDTO"
 		resultType="com.wallpad.project.dto.ParkingReserveDTO">
 		SELECT
-		carNumber, allowedPeriod
-		FROM parking_reserve
+		carNumber, allowedPeriod, apartmentNumber
+		FROM
+		parking_reserve
 		WHERE
-		carNumber =
-		#{carNumber}
+		carNumber = #{carNumber}
+		AND apartmentNumber =
+		#{apartmentNumber}
 	</select>
 
 	<insert id="saveParkingReserve"
 		parameterType="com.wallpad.project.dto.ParkingReserveDTO">
-		INSERT INTO parking_reserve (carNumber, allowedPeriod)
-		VALUES (#{carNumber}, #{allowedPeriod})
+		INSERT INTO parking_reserve (carNumber, allowedPeriod,
+		apartmentNumber)
+		VALUES (#{carNumber}, #{allowedPeriod},
+		#{apartmentNumber})
 	</insert>
 
 	<update id="updateParkingReserve"
@@ -244,7 +250,8 @@
 		UPDATE parking_reserve
 		SET allowedPeriod =
 		#{allowedPeriod}
-		WHERE carNumber = #{carNumber}
+		WHERE carNumber = #{carNumber} AND apartmentNumber =
+		#{apartmentNumber}
 	</update>
 
 
@@ -256,27 +263,39 @@
 		allowedPeriod >= CURDATE()
 	</select>
 
-
-	<select id="findCarNumber" parameterType="String"
-		resultType="com.wallpad.project.dto.EntryCarDTO">
-		SELECT carNumber
+	<select id="reserveStatesByApartment" parameterType="String"
+		resultType="com.wallpad.project.dto.ReserveStatesDTO">
+		SELECT carNumber, allowedPeriod
 		FROM parking_reserve
-		WHERE carNumber =
-		#{carNumber}
-		AND allowedPeriod > NOW();
+		WHERE
+		allowedPeriod >= CURDATE()
+		AND apartmentNumber = #{apartmentNumber}
+	</select>
+
+	<select id="findReservedCar" parameterType="String"
+		resultType="com.wallpad.project.dto.EntryCarDTO">
+		SELECT carNumber, apartmentNumber
+		FROM parking_reserve
+		WHERE carNumber = #{carNumber}
+		AND allowedPeriod > NOW()
 	</select>
 
 	<insert id="insertEntryCar"
 		parameterType="com.wallpad.project.dto.EntryCarDTO">
-		INSERT INTO entry_car (carNumber, entryTime)
+		INSERT INTO entry_car (carNumber, entryTime,
+		apartmentNumber)
 		VALUES
-		(#{carNumber}, #{entryTime});
+		(#{carNumber}, #{entryTime},
+		#{apartmentNumber});
 	</insert>
 
-	<select id="parkingStates"
+	<select id="parkingStatesByApartment" parameterType="String"
 		resultType="com.wallpad.project.dto.EntryCarDTO">
 		SELECT carNumber, entryTime
 		FROM entry_car
+		WHERE
+		apartmentNumber = #{apartmentNumber}
 	</select>
+
 
 </mapper>

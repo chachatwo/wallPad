@@ -128,7 +128,6 @@ public class RestController {
 			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads,
 			HttpServletRequest requestObj, HttpServletResponse response) throws IOException {
 
-		// 1. saveid 쿠키 추출
 		String savedId = null;
 		Cookie[] cookies = requestObj.getCookies();
 		if (cookies != null) {
@@ -139,53 +138,58 @@ public class RestController {
 				}
 			}
 		}
-		
-	    // 2. 동호수 조회
-	    String apartmentNumber = null;
-	    if (savedId != null) {
-	        apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
-	    }
-		
-	    // 3. 요청 DTO 생성 및 세팅
-	    RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
-	    repairRequestDTO.setApartmentNumber(apartmentNumber);
-	    repairRequestDTO.setMajorCategory(majorCategory);
-	    repairRequestDTO.setMiddleCategory(middleCategory);
-	    repairRequestDTO.setLastCategory(lastCategory);
-	    repairRequestDTO.setRequest(request);
-	    
-	    // 4. 저장
+
+		String apartmentNumber = null;
+		if (savedId != null) {
+			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
+		}
+
+		RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
+		repairRequestDTO.setApartmentNumber(apartmentNumber);
+		repairRequestDTO.setMajorCategory(majorCategory);
+		repairRequestDTO.setMiddleCategory(middleCategory);
+		repairRequestDTO.setLastCategory(lastCategory);
+		repairRequestDTO.setRequest(request);
+
 		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
 
 		response.sendRedirect("/repair");
 	}
 
 	@PostMapping("/api/parking/reserve/states")
-	public List<ReserveStatesDTO> reservation() {
-		List<ReserveStatesDTO> reservationList = apiService.reserveStates();
-
-		if (reservationList.isEmpty()) {
-			System.out.println("예약 목록이 비어 있습니다.");
-		} else {
-			for (int i = 0; i < reservationList.size(); i++) {
-				System.out.println("카 넘버는 :" + reservationList.get(i).getCarNumber());
-				System.out.println("출입 기간은 :" + reservationList.get(i).getAllowedPeriod());
+	public List<ReserveStatesDTO> reservation(HttpServletRequest request) {
+		String savedId = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("saveid".equals(cookie.getName())) {
+					savedId = cookie.getValue();
+					break;
+				}
 			}
 		}
 
-		return reservationList;
+		String apartmentNumber = null;
+		if (savedId != null) {
+			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
+		}
+
+		return apiService.reserveStatesByApartment(apartmentNumber);
 	}
 
 	@PostMapping("/api/register/car")
 	@ResponseBody
 	public EntryCarDTO registerEntryCar(@RequestBody EntryCarDTO entryCarDTO) {
-		EntryCarDTO result = apiService.registerEntryCar(entryCarDTO);
+		EntryCarDTO reservationInfo = apiService.findReservedCar(entryCarDTO.getCarNumber());
 
-		if (result != null) {
-			return result;
-		} else {
-			return null;
+		if (reservationInfo != null) {
+			entryCarDTO.setApartmentNumber(reservationInfo.getApartmentNumber());
+			apiService.insertEntryCar(entryCarDTO);
+
+			return entryCarDTO;
 		}
+
+		return null;
 	}
 
 }

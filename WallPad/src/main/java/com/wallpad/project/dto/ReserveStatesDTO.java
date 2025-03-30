@@ -10,4 +10,5 @@ import lombok.Setter;
 public class ReserveStatesDTO {
 	private String carNumber;
 	private Timestamp allowedPeriod;
+	private String apartmentNumber;
 }

@@ -149,8 +149,8 @@ public class ApiService {
 		return apiMapper.findRepairRequest();
 	}
 
-	public ParkingReserveDTO findByCarNumber(String carNumber) {
-		return apiMapper.findByCarNumber(carNumber);
+	public ParkingReserveDTO findByCarNumber(ParkingReserveDTO parkingReserveDTO) {
+		return apiMapper.findByCarNumber(parkingReserveDTO);
 	}
 
 	public int saveParkingReserve(ParkingReserveDTO parkingReserveDTO) {
@@ -165,18 +165,20 @@ public class ApiService {
 		return apiMapper.reserveStates();
 	}
 
-	public EntryCarDTO registerEntryCar(EntryCarDTO entryCarDTO) {
-		EntryCarDTO existingEntryCar = apiMapper.findCarNumber(entryCarDTO.getCarNumber());
-
-		if (existingEntryCar != null) {
-			apiMapper.insertEntryCar(entryCarDTO);
-			return entryCarDTO;
-		}
-		return null;
+	public List<ReserveStatesDTO> reserveStatesByApartment(String apartmentNumber) {
+		return apiMapper.reserveStatesByApartment(apartmentNumber);
 	}
 
-	public List<EntryCarDTO> parkingStates() {
-		return apiMapper.parkingStates();
+	public EntryCarDTO findReservedCar(String carNumber) {
+		return apiMapper.findReservedCar(carNumber);
+	}
+
+	public void insertEntryCar(EntryCarDTO entryCarDTO) {
+		apiMapper.insertEntryCar(entryCarDTO);
+	}
+
+	public List<EntryCarDTO> parkingStatesByApartment(String apartmentNumber) {
+		return apiMapper.parkingStatesByApartment(apartmentNumber);
 	}
 
 }

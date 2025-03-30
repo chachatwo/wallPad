@@ -245,30 +245,45 @@ public class BasicController {
 
 	@PostMapping("/api/parking/reserve")
 	public String parkingReserve(@RequestParam("carNumber") String carNumber,
-			@RequestParam("allowedPeriod") int allowedPeriod, RedirectAttributes redirectAttributes) {
+			@RequestParam("allowedPeriod") int allowedPeriod, HttpServletRequest request,
+			RedirectAttributes redirectAttributes) {
 
-		System.out.println("차량번호 : " + carNumber);
-		System.out.println("출입기간 : " + allowedPeriod);
+		String savedId = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("saveid".equals(cookie.getName())) {
+					savedId = cookie.getValue();
+					break;
+				}
+			}
+		}
+
+		String apartmentNumber = null;
+		if (savedId != null) {
+			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
+		}
 
 		LocalDateTime currentDateTime = LocalDateTime.now();
-
 		LocalDateTime reserveDateTime = currentDateTime.plusDays(allowedPeriod);
-
 		ZonedDateTime zonedDateTime = reserveDateTime.atZone(ZoneId.of("Asia/Seoul"));
 		Timestamp reserveTimestamp = Timestamp.from(zonedDateTime.toInstant());
 
 		ParkingReserveDTO parkingReserveDTO = new ParkingReserveDTO();
 		parkingReserveDTO.setCarNumber(carNumber);
 		parkingReserveDTO.setAllowedPeriod(reserveTimestamp);
+		parkingReserveDTO.setApartmentNumber(apartmentNumber);
 
-		ParkingReserveDTO existingReservation = apiService.findByCarNumber(carNumber);
+		ParkingReserveDTO condition = new ParkingReserveDTO();
+		condition.setCarNumber(carNumber);
+		condition.setApartmentNumber(apartmentNumber);
+		ParkingReserveDTO existingReservation = apiService.findByCarNumber(condition);
 
 		if (existingReservation != null) {
 			existingReservation.setAllowedPeriod(reserveTimestamp);
 			apiService.updateParkingReserve(existingReservation);
 			redirectAttributes.addFlashAttribute("message", "차량의 출입기간이 갱신되었습니다.");
 		} else {
-			System.out.println("새 예약을 추가합니다.");
 			apiService.saveParkingReserve(parkingReserveDTO);
 			redirectAttributes.addFlashAttribute("message", "차량의 예약이 완료되었습니다.");
 		}
@@ -277,18 +292,34 @@ public class BasicController {
 	}
 
 	@GetMapping("/parking")
-	public String parking(Model model) {
+	public String parking(HttpServletRequest request, Model model) {
 		if (model.containsAttribute("message")) {
 			String message = (String) model.getAttribute("message");
 			model.addAttribute("message", message);
 		}
 
-		List<EntryCarDTO> parkingList = apiService.parkingStates();
+		String savedId = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if ("saveid".equals(cookie.getName())) {
+					savedId = cookie.getValue();
+					break;
+				}
+			}
+		}
 
+		String apartmentNumber = null;
+		if (savedId != null) {
+			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
+		}
+
+		List<EntryCarDTO> parkingList = apiService.parkingStatesByApartment(apartmentNumber);
 		model.addAttribute("parking", parkingList);
 
 		return "parking";
 	}
+
 
 	@GetMapping("/entryCarTest")
 	public String entryCarTest(Model model) {

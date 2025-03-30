@@ -49,7 +49,7 @@ public interface ApiMapper {
 	List<NoticeDTO> findRecentNotices();
 
 	List<MaintenanceScheduleDTO> maintenanceSchedules();
-	
+
 	String findApartmentNumberBySavedId(String savedId);
 
 	void saveRepairRequest(RepairRequestDTO repairRequestDTO);
@@ -60,7 +60,7 @@ public interface ApiMapper {
 
 	void saveImage(RepairImageDTO repairImageDTO);
 
-	ParkingReserveDTO findByCarNumber(String carNumber);
+	ParkingReserveDTO findByCarNumber(ParkingReserveDTO parkingReserveDTO);
 
 	int saveParkingReserve(ParkingReserveDTO parkingReserveDTO);
 
@@ -68,9 +68,11 @@ public interface ApiMapper {
 
 	List<ReserveStatesDTO> reserveStates();
 
+	List<ReserveStatesDTO> reserveStatesByApartment(String apartmentNumber);
+
+	EntryCarDTO findReservedCar(String carNumber);
+
 	void insertEntryCar(EntryCarDTO entryCarDTO);
 
-	EntryCarDTO findCarNumber(String carNumber);
-
-	List<EntryCarDTO> parkingStates();
+	List<EntryCarDTO> parkingStatesByApartment(String apartmentNumber);
 }
