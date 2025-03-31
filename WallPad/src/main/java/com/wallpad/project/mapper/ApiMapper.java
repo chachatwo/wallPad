@@ -50,7 +50,7 @@ public interface ApiMapper {
 
 	List<MaintenanceScheduleDTO> maintenanceSchedules();
 
-	String findApartmentNumberBySavedId(String savedId);
+	String findApartmentNumberByUsername(String username);
 
 	void saveRepairRequest(RepairRequestDTO repairRequestDTO);
 

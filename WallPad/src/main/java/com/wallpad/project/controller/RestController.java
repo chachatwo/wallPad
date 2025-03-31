@@ -121,59 +121,10 @@ public class RestController {
 		return schedules;
 	}
 
-	@PostMapping("/api/repair")
-	public void submitRequest(@RequestParam("majorCategory") String majorCategory,
-			@RequestParam("middleCategory") String middleCategory, @RequestParam("lastCategory") String lastCategory,
-			@RequestParam("request") String request,
-			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads,
-			HttpServletRequest requestObj, HttpServletResponse response) throws IOException {
-
-		String savedId = null;
-		Cookie[] cookies = requestObj.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if ("saveid".equals(cookie.getName())) {
-					savedId = cookie.getValue();
-					break;
-				}
-			}
-		}
-
-		String apartmentNumber = null;
-		if (savedId != null) {
-			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
-		}
-
-		RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
-		repairRequestDTO.setApartmentNumber(apartmentNumber);
-		repairRequestDTO.setMajorCategory(majorCategory);
-		repairRequestDTO.setMiddleCategory(middleCategory);
-		repairRequestDTO.setLastCategory(lastCategory);
-		repairRequestDTO.setRequest(request);
-
-		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
-
-		response.sendRedirect("/repair");
-	}
-
 	@PostMapping("/api/parking/reserve/states")
-	public List<ReserveStatesDTO> reservation(HttpServletRequest request) {
-		String savedId = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if ("saveid".equals(cookie.getName())) {
-					savedId = cookie.getValue();
-					break;
-				}
-			}
-		}
-
-		String apartmentNumber = null;
-		if (savedId != null) {
-			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
-		}
-
+	public List<ReserveStatesDTO> reservation(HttpSession session) {
+		String username = (String) session.getAttribute("username");
+		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 		return apiService.reserveStatesByApartment(apartmentNumber);
 	}
 

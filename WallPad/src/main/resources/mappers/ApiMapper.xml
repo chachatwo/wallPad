@@ -183,7 +183,7 @@
 		)
 	</insert>
 
-	<select id="findApartmentNumberBySavedId" resultType="String">
+	<select id="findApartmentNumberByUsername" resultType="String">
 		SELECT
 		apartmentNumber
 		FROM users

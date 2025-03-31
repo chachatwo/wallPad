@@ -141,8 +141,8 @@ public class ApiService {
 		}
 	}
 
-	public String findApartmentNumberBySavedId(String savedId) {
-		return apiMapper.findApartmentNumberBySavedId(savedId);
+	public String findApartmentNumberByUsername(String username) {
+		return apiMapper.findApartmentNumberByUsername(username);
 	}
 
 	public List<RepairRequestDTO> findRepairRequest() {

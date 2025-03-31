@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.wallpad.project.dto.EntryCarDTO;
@@ -245,85 +246,87 @@ public class BasicController {
 
 	@PostMapping("/api/parking/reserve")
 	public String parkingReserve(@RequestParam("carNumber") String carNumber,
-			@RequestParam("allowedPeriod") int allowedPeriod, HttpServletRequest request,
+			@RequestParam("allowedPeriod") int allowedPeriod, HttpSession session,
 			RedirectAttributes redirectAttributes) {
 
-		String savedId = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if ("saveid".equals(cookie.getName())) {
-					savedId = cookie.getValue();
-					break;
-				}
-			}
-		}
+		String username = (String) session.getAttribute("username");
+		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 
-		String apartmentNumber = null;
-		if (savedId != null) {
-			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
-		}
+		LocalDateTime reserveDateTime = LocalDateTime.now().plusDays(allowedPeriod);
+		Timestamp reserveTimestamp = Timestamp.from(reserveDateTime.atZone(ZoneId.of("Asia/Seoul")).toInstant());
 
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		LocalDateTime reserveDateTime = currentDateTime.plusDays(allowedPeriod);
-		ZonedDateTime zonedDateTime = reserveDateTime.atZone(ZoneId.of("Asia/Seoul"));
-		Timestamp reserveTimestamp = Timestamp.from(zonedDateTime.toInstant());
-
-		ParkingReserveDTO parkingReserveDTO = new ParkingReserveDTO();
-		parkingReserveDTO.setCarNumber(carNumber);
-		parkingReserveDTO.setAllowedPeriod(reserveTimestamp);
-		parkingReserveDTO.setApartmentNumber(apartmentNumber);
+		ParkingReserveDTO dto = new ParkingReserveDTO();
+		dto.setCarNumber(carNumber);
+		dto.setAllowedPeriod(reserveTimestamp);
+		dto.setApartmentNumber(apartmentNumber);
 
 		ParkingReserveDTO condition = new ParkingReserveDTO();
 		condition.setCarNumber(carNumber);
 		condition.setApartmentNumber(apartmentNumber);
-		ParkingReserveDTO existingReservation = apiService.findByCarNumber(condition);
+		ParkingReserveDTO existing = apiService.findByCarNumber(condition);
 
-		if (existingReservation != null) {
-			existingReservation.setAllowedPeriod(reserveTimestamp);
-			apiService.updateParkingReserve(existingReservation);
+		if (existing != null) {
+			existing.setAllowedPeriod(reserveTimestamp);
+			apiService.updateParkingReserve(existing);
 			redirectAttributes.addFlashAttribute("message", "차량의 출입기간이 갱신되었습니다.");
 		} else {
-			apiService.saveParkingReserve(parkingReserveDTO);
+			apiService.saveParkingReserve(dto);
 			redirectAttributes.addFlashAttribute("message", "차량의 예약이 완료되었습니다.");
 		}
-
 		return "redirect:/parking";
 	}
 
 	@GetMapping("/parking")
-	public String parking(HttpServletRequest request, Model model) {
+	public String parking(HttpSession session, Model model) {
 		if (model.containsAttribute("message")) {
 			String message = (String) model.getAttribute("message");
 			model.addAttribute("message", message);
 		}
 
-		String savedId = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if ("saveid".equals(cookie.getName())) {
-					savedId = cookie.getValue();
-					break;
-				}
-			}
-		}
+		String username = (String) session.getAttribute("username");
+		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 
-		String apartmentNumber = null;
-		if (savedId != null) {
-			apartmentNumber = apiService.findApartmentNumberBySavedId(savedId);
-		}
+		System.out.println("로그인된 사용자: " + username);
+		System.out.println("해당 아파트번호: " + apartmentNumber);
 
 		List<EntryCarDTO> parkingList = apiService.parkingStatesByApartment(apartmentNumber);
+
+		System.out.println("입차리스트: " + parkingList);
+
 		model.addAttribute("parking", parkingList);
 
 		return "parking";
 	}
 
-
 	@GetMapping("/entryCarTest")
 	public String entryCarTest(Model model) {
 		return "entryCarTest";
+	}
+
+	@PostMapping("/api/repair")
+	public String submitRequest(@RequestParam("majorCategory") String majorCategory,
+			@RequestParam("middleCategory") String middleCategory, @RequestParam("lastCategory") String lastCategory,
+			@RequestParam("request") String requestText,
+			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+
+		String username = (String) session.getAttribute("username");
+		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
+
+		System.out.println("로그인된 사용자: " + username);
+		System.out.println("해당 아파트번호: " + apartmentNumber);
+
+		RepairRequestDTO repairRequestDTO = new RepairRequestDTO();
+		repairRequestDTO.setApartmentNumber(apartmentNumber);
+		repairRequestDTO.setMajorCategory(majorCategory);
+		repairRequestDTO.setMiddleCategory(middleCategory);
+		repairRequestDTO.setLastCategory(lastCategory);
+		repairRequestDTO.setRequest(requestText);
+
+		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
+
+		redirectAttributes.addFlashAttribute("message", "수리 요청이 성공적으로 접수되었습니다.");
+		return "redirect:/repair";
 	}
 
 }
