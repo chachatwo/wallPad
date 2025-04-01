@@ -1,4 +1,3 @@
-// 날짜 업데이트
 function updateClock() {
 	const now = new Date();
 	const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
@@ -15,7 +14,7 @@ function updateClock() {
 
 	if (hours >= 12) {
 		ampm = 'PM';
-		displayHours = hours % 12;    // 나머지 값 가져오기
+		displayHours = hours % 12;    
 		if (displayHours === 0) {
 			displayHours = 12;
 		}
@@ -109,10 +108,8 @@ const cityNameTranslations = {
 	"Jeongseon": "정선",
 	"Hongseong": "홍성",
 	"Gunpo": "군포"
-	// 여기에 원하는 도시 이름을 추가하세요.
 };
 
-// 날씨 정보 업데이트
 function updateWeatherAndAirQuality(position) {
 	const lat = position.coords.latitude;
 	const lon = position.coords.longitude;
@@ -128,28 +125,26 @@ function updateWeatherAndAirQuality(position) {
 			const temperature = data.main.temp;
 			let weatherIcon = '';
 
-			// 도시명이 cityNameTranslations에 존재하면 변환, 아니면 그대로 사용
 			if (cityNameTranslations[cityName]) {
 				cityName = cityNameTranslations[cityName];
 			}
 
-			// 날씨에 맞는 아이콘 설정
 			if (weatherDescription.includes('clear') || weatherDescription.includes('맑음')) {
-				weatherIcon = '🌞'; // 맑은 날씨 아이콘
+				weatherIcon = '🌞';
 			} else if (weatherDescription.includes('cloud') || weatherDescription.includes('구름')) {
-				weatherIcon = '🌥️'; // 구름 낀 날씨 아이콘
+				weatherIcon = '🌥️';
 			} else if (weatherDescription.includes('rain') || weatherDescription.includes('비')) {
-				weatherIcon = '🌧️'; // 비 아이콘
+				weatherIcon = '🌧️'; 
 			} else if (weatherDescription.includes('snow') || weatherDescription.includes('눈')) {
-				weatherIcon = '❄️'; // 눈 아이콘
+				weatherIcon = '❄️'; 
 			} else if (weatherDescription.includes('fog') || weatherDescription.includes('안개') || weatherDescription.includes('박무') || weatherDescription.includes('흐림') || weatherDescription.includes('온흐림') || weatherDescription.includes('mist')) {
-				weatherIcon = '🌫️'; // 안개 아이콘
+				weatherIcon = '🌫️'; 
 			} else if (weatherDescription.includes('thunderstorm') || weatherDescription.includes('천둥')) {
-				weatherIcon = '🌩️'; // 천둥 아이콘
+				weatherIcon = '🌩️'; 
 			} else if (weatherDescription.includes('dust') || weatherDescription.includes('sand') || weatherDescription.includes('황사')) {
-				weatherIcon = '🌪️'; // 황사 아이콘
+				weatherIcon = '🌪️'; 
 			} else if (weatherDescription.includes('hail') || weatherDescription.includes('우박')) {
-				weatherIcon = '⛈️'; // 우박 아이콘
+				weatherIcon = '⛈️'; 
 			}
 
 			document.getElementById("cityName").textContent = `${cityName}`;
@@ -172,24 +167,22 @@ function updateWeatherAndAirQuality(position) {
 		.then(data => {
 			const airQuality = data.data.current.pollution.aqius;
 			let airQualityText = '';
-			let airQualityIcon = ''; // 아이콘을 저장할 변수
+			let airQualityIcon = ''; 
 
-			// 미세먼지 상태에 따라 텍스트와 아이콘 설정
 			if (airQuality <= 50) {
 				airQualityText = '좋음';
-				airQualityIcon = '🌿';  // 식물 아이콘
+				airQualityIcon = '🌿';  
 			} else if (airQuality <= 100) {
 				airQualityText = '보통';
-				airQualityIcon = '😐';  // 무표정 아이콘
+				airQualityIcon = '😐'; 
 			} else if (airQuality <= 150) {
 				airQualityText = '나쁨';
-				airQualityIcon = '😷';  // 마스크 아이콘
+				airQualityIcon = '😷'; 
 			} else {
 				airQualityText = '매우 나쁨';
-				airQualityIcon = '⚠️';  // 경고 아이콘
+				airQualityIcon = '⚠️';  
 			}
 
-			// 미세먼지 상태와 아이콘을 화면에 표시
 			document.getElementById("airQuality").innerHTML = `${airQualityIcon} ${airQualityText}`;
 		})
 		.catch(error => {
@@ -203,19 +196,19 @@ function handleError(error) {
 	switch (error.code) {
 		case error.PERMISSION_DENIED:
 			alert("위치 정보 제공이 거부되었습니다. 기본 위치로 설정됩니다.");
-			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); // 기본 위치로 날씨 및 미세먼지 정보 업데이트
+			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); 
 			break;
 		case error.POSITION_UNAVAILABLE:
 			alert("위치 정보를 사용할 수 없습니다. 기본 위치로 설정됩니다.");
-			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); // 기본 위치로 날씨 및 미세먼지 정보 업데이트
+			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); 
 			break;
 		case error.TIMEOUT:
 			alert("위치 정보 가져오기 요청 시간이 초과되었습니다. 기본 위치로 설정됩니다.");
-			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); // 기본 위치로 날씨 및 미세먼지 정보 업데이트
+			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); 
 			break;
 		case error.UNKNOWN_ERROR:
 			alert("알 수 없는 오류가 발생했습니다. 기본 위치로 설정됩니다.");
-			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); // 기본 위치로 날씨 및 미세먼지 정보 업데이트
+			updateWeatherAndAirQuality({ coords: { latitude: defaultLat, longitude: defaultLon } }); 
 			break;
 	}
 }
@@ -223,11 +216,11 @@ function handleError(error) {
 
 document.querySelectorAll('.notices-widget li').forEach(function(noticeItem) {
 	noticeItem.addEventListener('click', function() {
-		var fullContent = noticeItem.querySelector('.content').innerText; // 공지사항의 내용을 가져옴
-		document.getElementById('modalContent').innerText = fullContent; // 모달 내용에 삽입
+		var fullContent = noticeItem.querySelector('.content').innerText; 
+		document.getElementById('modalContent').innerText = fullContent; 
 
-		var myModal = new bootstrap.Modal(document.getElementById('contentModal')); // 모달 객체 생성
-		myModal.show(); // 모달 표시
+		var myModal = new bootstrap.Modal(document.getElementById('contentModal')); 
+		myModal.show(); 
 	});
 });
 

@@ -190,20 +190,24 @@
 		WHERE username = #{savedId}
 	</select>
 
-	<select id="findRepairRequest"
+	<select id="findRepairRequestByApartment" parameterType="string"
 		resultType="com.wallpad.project.dto.RepairRequestDTO">
 		SELECT
 		apartmentNumber,
-		majorCategory, middleCategory,
-		lastCategory, request
+		majorCategory,
+		middleCategory,
+		lastCategory,
+		request
 		FROM
 		repair_request
 		WHERE
-		status = '예정' or status =
-		'진행중'
+		apartmentNumber = #{apartmentNumber}
+		AND (status = '예정' OR status =
+		'진행중')
 		ORDER BY
 		requestTime DESC;
 	</select>
+
 
 
 
@@ -276,7 +280,8 @@
 		resultType="com.wallpad.project.dto.EntryCarDTO">
 		SELECT carNumber, apartmentNumber
 		FROM parking_reserve
-		WHERE carNumber = #{carNumber}
+		WHERE
+		carNumber = #{carNumber}
 		AND allowedPeriod > NOW()
 	</select>
 

@@ -97,6 +97,10 @@
 											</td>
 											<td class="col-6" th:text="${schedules.status}"></td>
 										</tr>
+
+										<tr th:if="${#lists.isEmpty(schedules)}">
+											<td colspan="6" class="text-center">📌 예약된 일정이 없습니다.</td>
+										</tr>
 									</tbody>
 								</table>
 							</div>

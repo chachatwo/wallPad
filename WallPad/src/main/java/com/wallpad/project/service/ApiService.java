@@ -145,8 +145,8 @@ public class ApiService {
 		return apiMapper.findApartmentNumberByUsername(username);
 	}
 
-	public List<RepairRequestDTO> findRepairRequest() {
-		return apiMapper.findRepairRequest();
+	public List<RepairRequestDTO> findRepairRequestByApartment(String apartmentNumber) {
+		return apiMapper.findRepairRequestByApartment(apartmentNumber);
 	}
 
 	public ParkingReserveDTO findByCarNumber(ParkingReserveDTO parkingReserveDTO) {
@@ -161,9 +161,6 @@ public class ApiService {
 		return apiMapper.updateParkingReserve(parkingReserveDTO);
 	}
 
-	public List<ReserveStatesDTO> reserveStates() {
-		return apiMapper.reserveStates();
-	}
 
 	public List<ReserveStatesDTO> reserveStatesByApartment(String apartmentNumber) {
 		return apiMapper.reserveStatesByApartment(apartmentNumber);

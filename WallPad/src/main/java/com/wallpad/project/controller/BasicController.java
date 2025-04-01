@@ -186,44 +186,37 @@ public class BasicController {
 	}
 
 	@GetMapping("/dashboard")
-	public String getdashboard(Model model) {
-		List<NoticeDTO> notices = apiService.findRecentNotices();
+	public String getdashboard(HttpSession session, Model model) {
+		String username = (String) session.getAttribute("username");
+		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 
+		List<NoticeDTO> notices = apiService.findRecentNotices();
 		if (notices.size() > 3) {
 			notices = notices.subList(0, 3);
 		}
-
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
 		for (NoticeDTO notice : notices) {
 			String formattedDate = notice.getCreatedAt().format(formatter);
 			notice.setFormattedCreatedAt(formattedDate);
 		}
-
 		model.addAttribute("notices", notices);
 
 		List<MaintenanceScheduleDTO> schedules = apiService.maintenanceSchedules();
-
 		if (schedules.size() > 3) {
 			schedules = schedules.subList(0, 3);
 		}
-
 		model.addAttribute("schedules", schedules);
 
-		List<RepairRequestDTO> repair = apiService.findRepairRequest();
-
+		List<RepairRequestDTO> repair = apiService.findRepairRequestByApartment(apartmentNumber);
 		if (repair.size() > 3) {
 			repair = repair.subList(0, 3);
 		}
-
 		model.addAttribute("repair", repair);
 
-		List<ReserveStatesDTO> reserve = apiService.reserveStates();
-
+		List<ReserveStatesDTO> reserve = apiService.reserveStatesByApartment(apartmentNumber);
 		if (reserve.size() > 3) {
 			reserve = reserve.subList(0, 3);
 		}
-
 		model.addAttribute("reserve", reserve);
 
 		return "dashboard";
@@ -231,10 +224,13 @@ public class BasicController {
 
 	@GetMapping("/schedule")
 	public String schedule(Model model) {
-
 		List<MaintenanceScheduleDTO> schedules = apiService.maintenanceSchedules();
-		model.addAttribute("schedules", schedules);
 
+		if (schedules == null) {
+			schedules = new ArrayList<>();
+		}
+
+		model.addAttribute("schedules", schedules);
 		return "schedule";
 	}
 

@@ -54,7 +54,7 @@ public interface ApiMapper {
 
 	void saveRepairRequest(RepairRequestDTO repairRequestDTO);
 
-	List<RepairRequestDTO> findRepairRequest();
+	List<RepairRequestDTO> findRepairRequestByApartment(String apartmentNumber);
 
 	int getLastInsertedId();
 
