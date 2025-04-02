@@ -1,23 +1,23 @@
-let schedules = []; 
-let selectedMonth = new Date().getMonth(); 
+let schedules = [];
+let selectedMonth = new Date().getMonth();
 
 const monthElement = document.getElementById("month");
 const calendarBox = document.getElementById("calendar");
 const monthSelect = document.getElementById("monthSelect");
 
-const scheduleCache = {}; 
+const scheduleCache = {};
 
 function fetchSchedules() {
-	const cacheKey = `${new Date().getFullYear()}-${selectedMonth + 1}`; 
-	const cached = scheduleCache[cacheKey]; 
+	const cacheKey = `${new Date().getFullYear()}-${selectedMonth + 1}`;
+	const cached = scheduleCache[cacheKey];
 
 	const now = Date.now();
-	const fiveMinutes = 5 * 60 * 1000; 
-	
+	const fiveMinutes = 5 * 60 * 1000;
+
 	console.log(scheduleCache);
 
 	if (cached && now - cached.cachedAt < fiveMinutes) {
-		schedules = cached.data; 
+		schedules = cached.data;
 		renderMonth(selectedMonth);
 		renderCalendar();
 	} else {
@@ -42,9 +42,9 @@ function fetchSchedules() {
 }
 
 function onMonthChange() {
-	selectedMonth = parseInt(monthSelect.value); 
-	renderMonth(selectedMonth);  
-	renderCalendar();  
+	selectedMonth = parseInt(monthSelect.value);
+	renderMonth(selectedMonth);
+	renderCalendar();
 }
 
 function renderMonth(month) {
@@ -56,24 +56,28 @@ function renderCalendar() {
 	const date = new Date();
 	const year = date.getFullYear();
 	const lastDate = new Date(year, selectedMonth + 1, 0).getDate();
-	const firstDay = new Date(year, selectedMonth, 1).getDay();
+	const firstDay = new Date(year, selectedMonth, 1).getDay(); // 0 = SUN
 
-	let calendar = "<table><tr><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th><th>SUN</th></tr><tr>";
+	let calendar = "<table><tr><th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th></tr><tr>";
 	let day = 1;
 
-	for (let i = 0; i < firstDay; i++) calendar += "<td></td>";
+	for (let i = 0; i < firstDay; i++) {
+		calendar += "<td></td>";
+	}
 
-	for (let i = firstDay; day <= lastDate; i++) {
+	for (let i = 0; day <= lastDate; i++) {
 		const dateString = formatDate(day, selectedMonth);
 		const hasSchedule = schedules.some(schedule => schedule.maintenanceDate === dateString);
 
 		calendar += `<td class="${hasSchedule ? 'has-schedule' : ''}">${day}</td>`;
 
-		if ((i + 1) % 7 === 0) {
+		if ((i + firstDay + 1) % 7 === 0) {
 			calendar += "</tr><tr>";
 		}
+
 		day++;
 	}
+
 	calendar += "</tr></table>";
 	calendarBox.innerHTML = calendar;
 
@@ -81,6 +85,7 @@ function renderCalendar() {
 		showModal($(this).text());
 	});
 }
+
 
 function formatDate(day, month) {
 	return `${new Date().getFullYear()}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;

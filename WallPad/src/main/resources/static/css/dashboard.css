@@ -45,6 +45,14 @@ body {
 	height: 610px;
 }
 
+.column-middle {
+  overflow-y: auto;
+}
+
+.column-middle::-webkit-scrollbar {
+  width: 10px;
+}
+
 .dashboard-widget {
 	background: linear-gradient(to bottom, #e6fffe, #ffffff);
 	border: 1px solid #c9f0f0;

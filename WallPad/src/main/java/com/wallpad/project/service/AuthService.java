@@ -64,7 +64,7 @@ public class AuthService {
 
 	public String generateToken(String userEmail) {
 		return Jwts.builder().setSubject(userEmail).setIssuedAt(new Date())
-				.setExpiration(new Date(System.currentTimeMillis() + 3600000))
+				.setExpiration(new Date(System.currentTimeMillis() + 600000))
 				.signWith(SignatureAlgorithm.HS256, secretKey).compact();
 	}
 
