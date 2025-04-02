@@ -44,6 +44,7 @@ public class RestController {
 	private final ApiService apiService;
 	private final AuthService authService;
 
+	
 	@Value("${jwt.secret}")
 	private String secretKey;
 

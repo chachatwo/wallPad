@@ -45,10 +45,14 @@ public interface ApiMapper {
 	void clearResetToken(int userId);
 
 	List<NoticeDTO> findAllNotices();
+	
+	void addNotice(NoticeDTO noticeDTO);
 
 	List<NoticeDTO> findRecentNotices();
 
 	List<MaintenanceScheduleDTO> maintenanceSchedules();
+	
+	void addMaintenanceSchedule(MaintenanceScheduleDTO scheduleDTO);
 
 	String findApartmentNumberByUsername(String username);
 

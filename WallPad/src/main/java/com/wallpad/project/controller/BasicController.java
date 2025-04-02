@@ -12,6 +12,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.Session;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,6 +52,8 @@ public class BasicController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	@Autowired
+	private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
 
 	@GetMapping("/signup")
 	public String signup(Model model) {
@@ -82,6 +87,13 @@ public class BasicController {
 		boolean isValid = authService.authenticate(username, password);
 
 		if (isValid) {
+			Map<String, ? extends Session> userSessions = sessionRepository.findByPrincipalName(username);
+			for (Session s : userSessions.values()) {
+				if (!s.getId().equals(session.getId())) {
+					sessionRepository.deleteById(s.getId());
+				}
+			}
+
 			session.setAttribute("username", username);
 
 			if (rememberMe) {
@@ -94,7 +106,7 @@ public class BasicController {
 			}
 
 			List<GrantedAuthority> authorities = new ArrayList<>();
-			authorities.add(new SimpleGrantedAuthority("ROLE_USER")); // 사용자 권한 부여
+			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
 			Authentication authentication = new UsernamePasswordAuthenticationToken(username, password, authorities);
 			SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,10 +68,10 @@ public class ApiService {
 		return count == 0;
 	}
 
+	@Cacheable(value = "notices")
 	public List<NoticeDTO> findAllNotices() {
 		List<NoticeDTO> notices = apiMapper.findAllNotices();
 
-		// 날짜 포맷 처리
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		for (NoticeDTO notice : notices) {
 			String formattedDate = notice.getCreatedAt().format(formatter);
@@ -82,7 +84,6 @@ public class ApiService {
 	public List<NoticeDTO> findRecentNotices() {
 		List<NoticeDTO> notices = apiMapper.findRecentNotices();
 
-		// 날짜 포맷 처리
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		for (NoticeDTO notice : notices) {
 			String formattedDate = notice.getCreatedAt().format(formatter);
@@ -92,6 +93,7 @@ public class ApiService {
 		return notices;
 	}
 
+	@Cacheable(value = "maintenanceSchedules")
 	public List<MaintenanceScheduleDTO> maintenanceSchedules() {
 		return apiMapper.maintenanceSchedules();
 	}
@@ -160,7 +162,6 @@ public class ApiService {
 	public int updateParkingReserve(ParkingReserveDTO parkingReserveDTO) {
 		return apiMapper.updateParkingReserve(parkingReserveDTO);
 	}
-
 
 	public List<ReserveStatesDTO> reserveStatesByApartment(String apartmentNumber) {
 		return apiMapper.reserveStatesByApartment(apartmentNumber);
