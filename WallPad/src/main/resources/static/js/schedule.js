@@ -12,7 +12,7 @@ function fetchSchedules() {
 	const cached = scheduleCache[cacheKey];
 
 	const now = Date.now();
-	const fiveMinutes = 5 * 60 * 1000;
+	const fiveMinutes = 1 * 60 * 1000;
 
 	console.log(scheduleCache);
 
