@@ -30,8 +30,8 @@ public class AuthService {
 
 	private final ApiMapper apiMapper;
 	private final BCryptPasswordEncoder passwordEncoder;
+	private final JavaMailSender mailSender;
 	@Autowired
-	private JavaMailSender mailSender;
 
 	@Value("${jwt.secret}")
 	private String secretKey;

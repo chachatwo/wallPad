@@ -62,71 +62,70 @@ public class BasicController {
 
 	@GetMapping("/login")
 	public String loginPage(HttpServletRequest request, Model model) {
-		String savedId = null;
-
+		String rememberMeValue = null;
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				if ("saveid".equals(cookie.getName())) {
-					savedId = cookie.getValue();
+					rememberMeValue = cookie.getValue();
 					break;
 				}
 			}
 		}
 
-		model.addAttribute("savedId", savedId);
-		model.addAttribute("rememberMeChecked", savedId != null);
-
+		model.addAttribute("rememberMeValue", rememberMeValue);
+		model.addAttribute("rememberMeChecked", rememberMeValue != null);
 		return "login";
 	}
 
-	@PostMapping("/login")
-	public String login(HttpServletResponse response, @RequestParam String username, @RequestParam String password,
-			@RequestParam(required = false) boolean rememberMe, HttpSession session) {
-
-		boolean isValid = authService.authenticate(username, password);
-
-		if (isValid) {
-			Map<String, ? extends Session> userSessions = sessionRepository.findByPrincipalName(username);
-			for (Session s : userSessions.values()) {
-				if (!s.getId().equals(session.getId())) {
-					sessionRepository.deleteById(s.getId());
-				}
-			}
-
-			session.setAttribute("username", username);
-
-			if (rememberMe) {
-				Cookie rememberCookie = new Cookie("saveid", username);
-				rememberCookie.setMaxAge(30 * 24 * 60 * 60);
-				rememberCookie.setPath("/");
-				rememberCookie.setHttpOnly(true);
-				rememberCookie.setSecure(false);
-				response.addCookie(rememberCookie);
-			}
-
-			List<GrantedAuthority> authorities = new ArrayList<>();
-			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-			Authentication authentication = new UsernamePasswordAuthenticationToken(username, password, authorities);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-
-			return "redirect:/dashboard";
-		} else {
-			System.out.println("로그인 실패: 아이디 또는 비밀번호 오류");
-			return "redirect:/login?error";
-		}
-	}
+	// 로그인 시 수동 인증에서 시큐리티 사용으로 변경하면서 전체 주석처리(직접 인증 트레이닝용)
+//	@PostMapping("/login")
+//	public String login(HttpServletResponse response, @RequestParam String username, @RequestParam String password,
+//			@RequestParam(required = false) boolean rememberMe, HttpSession session) {
+//
+//		boolean isValid = authService.authenticate(username, password);
+//
+//		if (isValid) {
+//			Map<String, ? extends Session> userSessions = sessionRepository.findByPrincipalName(username);
+//			for (Session s : userSessions.values()) {
+//				if (!s.getId().equals(session.getId())) {
+//					sessionRepository.deleteById(s.getId());
+//				}
+//			}
+//
+//			session.setAttribute("username", username);
+//
+//			if (rememberMe) {
+//				Cookie rememberCookie = new Cookie("saveid", username);
+//				rememberCookie.setMaxAge(30 * 24 * 60 * 60);
+//				rememberCookie.setPath("/");
+//				rememberCookie.setHttpOnly(true);
+//				rememberCookie.setSecure(false);
+//				response.addCookie(rememberCookie);
+//			}
+//
+//			List<GrantedAuthority> authorities = new ArrayList<>();
+//			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+//
+//			Authentication authentication = new UsernamePasswordAuthenticationToken(username, password, authorities);
+//			SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//			return "redirect:/dashboard";
+//		} else {
+//			System.out.println("로그인 실패: 아이디 또는 비밀번호 오류");
+//			return "redirect:/login?error";
+//		}
+//	}
 
 	@GetMapping("/logout")
 	public String logout(HttpServletResponse response, HttpSession session) {
-		Cookie saveidCookie = new Cookie("saveid", null);
-		saveidCookie.setMaxAge(0);
-		saveidCookie.setPath("/");
-		saveidCookie.setHttpOnly(true);
-		saveidCookie.setSecure(false);
-		saveidCookie.setDomain("localhost");
-		response.addCookie(saveidCookie);
+		Cookie Cookie = new Cookie("saveid", null);
+		Cookie.setMaxAge(0);
+		Cookie.setPath("/");
+		Cookie.setHttpOnly(true);
+		Cookie.setSecure(false);
+		Cookie.setDomain("localhost");
+		response.addCookie(Cookie);
 
 		session.invalidate();
 
@@ -198,8 +197,8 @@ public class BasicController {
 	}
 
 	@GetMapping("/dashboard")
-	public String getdashboard(HttpSession session, Model model) {
-		String username = (String) session.getAttribute("username");
+	public String getdashboard(HttpServletRequest request, HttpServletResponse response, Model model) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 
 		List<NoticeDTO> notices = apiService.findRecentNotices();
@@ -254,10 +253,9 @@ public class BasicController {
 
 	@PostMapping("/api/parking/reserve")
 	public String parkingReserve(@RequestParam("carNumber") String carNumber,
-			@RequestParam("allowedPeriod") int allowedPeriod, HttpSession session,
-			RedirectAttributes redirectAttributes) {
+			@RequestParam("allowedPeriod") int allowedPeriod, RedirectAttributes redirectAttributes) {
 
-		String username = (String) session.getAttribute("username");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 
 		LocalDateTime reserveDateTime = LocalDateTime.now().plusDays(allowedPeriod);
@@ -285,24 +283,21 @@ public class BasicController {
 	}
 
 	@GetMapping("/parking")
-	public String parking(HttpSession session, Model model) {
+	public String parking(Model model) {
 		if (model.containsAttribute("message")) {
 			String message = (String) model.getAttribute("message");
 			model.addAttribute("message", message);
 		}
 
-		String username = (String) session.getAttribute("username");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 
 		System.out.println("로그인된 사용자: " + username);
 		System.out.println("해당 아파트번호: " + apartmentNumber);
 
 		List<EntryCarDTO> parkingList = apiService.parkingStatesByApartment(apartmentNumber);
-
 		System.out.println("입차리스트: " + parkingList);
-
 		model.addAttribute("parking", parkingList);
-
 		return "parking";
 	}
 
@@ -315,10 +310,10 @@ public class BasicController {
 	public String submitRequest(@RequestParam("majorCategory") String majorCategory,
 			@RequestParam("middleCategory") String middleCategory, @RequestParam("lastCategory") String lastCategory,
 			@RequestParam("request") String requestText,
-			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads, HttpSession session,
+			@RequestParam(value = "imageUpload[]", required = false) MultipartFile[] imageUploads,
 			RedirectAttributes redirectAttributes) {
 
-		String username = (String) session.getAttribute("username");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 
 		System.out.println("로그인된 사용자: " + username);
@@ -332,7 +327,6 @@ public class BasicController {
 		repairRequestDTO.setRequest(requestText);
 
 		apiService.saveRepairRequest(repairRequestDTO, imageUploads);
-
 		redirectAttributes.addFlashAttribute("message", "수리 요청이 성공적으로 접수되었습니다.");
 		return "redirect:/repair";
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -83,7 +84,7 @@ public class RestController {
 	@Operation(summary = "아파트 차량 예약 상태 조회", description = "세션 사용자 기반으로 예약된 차량 상태를 조회합니다.")
 	@PostMapping("/api/parking/reserve/states")
 	public List<ReserveStatesDTO> reservation(HttpSession session) {
-		String username = (String) session.getAttribute("username");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		String apartmentNumber = apiService.findApartmentNumberByUsername(username);
 		return apiService.reserveStatesByApartment(apartmentNumber);
 	}

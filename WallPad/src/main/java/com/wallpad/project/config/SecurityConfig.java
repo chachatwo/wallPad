@@ -15,6 +15,7 @@ import com.wallpad.project.service.CustomUserDetailsService;
 
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -47,14 +48,10 @@ public class SecurityConfig {
             .and()
             .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/remember/id")
-                .defaultSuccessUrl("/dashboard", true)
+                .loginProcessingUrl("/login")
+                .successHandler(new CustomLoginSuccessHandler())
                 .failureUrl("/login?error")
                 .permitAll()
-            .and()
-            .rememberMe()
-                .key("uniqueAndSecret")  
-                .userDetailsService(userDetailsService)  
             .and()
             .logout()
                 .logoutUrl("/logout")  // 로그아웃 URL
