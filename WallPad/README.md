@@ -22,8 +22,28 @@
 | Database | MySQL |
 | Cloud | Google Cloud Storage (GCS) |
 | Mail | JavaMailSender |
-| 기타 | Lombok, DataTables, Ajax, Redis, cache |
+| 기타 | Lombok, DataTables, Ajax, Redis, cache, JUnit5, Mockito |
 
+
+---
+
+## 배포 환경
+
+본 프로젝트는 AWS EC2 환경에 배포 완료된 상태이며, 실제 웹 브라우저에서 접속 가능한 상태입니다.
+
+- **배포 방식:** Amazon EC2 + Spring Boot 독립 실행형 (`.jar`)
+- **접속 주소:** http://52.79.201.43:8080
+- **운영 환경:** Ubuntu 20.04, OpenJDK 11, MySQL, Git, GCS 연동
+- **세션 관리:** Redis 미설치 환경 고려 → HttpSession 기반으로 설정
+- **배포 상태:** 2025년 4월 9일 기준 모든 기능 배포 완료 및 정상 작동 확인
+
+## 환경별 인증 구조 및 세션 관리 전략
+
+개발 환경에서는 Redis를 활용한 세션 관리 및 이중 로그인 방지 기능을 실습하며 확장성 중심의 인증 구조를 구성하였습니다.
+반면, 배포 환경에서는 Redis 미설치 상황을 고려하여 기본 HttpSession(JSESSIONID) 기반 인증 방식으로 유연하게 전환하였습니다.
+
+- 개발 환경: spring-session-data-redis 기반 세션 관리 + 이중 로그인 제어 실습
+- 배포 환경: Redis 제거 → Spring Boot 기본 세션(HttpSession) 방식으로 동작
 
 ---
 
@@ -33,7 +53,20 @@
 
 - 유효성 검사 적용(아이디/이메일 중복, 이메일 포맷, 동호수 정규식, 전화번호 자동 하이픈 처리)
 - 세션 기반 인증 + JWT 기반 이메일 인증/비밀번호 재설정 (10분 유효) 
-- 수동 쿠키 기반 Remember-Me 구현 (HttpOnly 적용, Security 미사용)
+- 수동 쿠키 기반 Remember-Me 구현 (HttpOnly 적용)
+
+### 대시보드
+
+- 로그인한 사용자의 아파트 번호 기준으로 필터링된 콘텐츠 제공
+- 공지사항, 수리 요청, 차량 예약, 일정 등 요약 제공
+- 날씨, 미세먼지 API(OpenWeatherMap + AirVisual) 연동
+- 실시간 시계 표시 (setInterval 기반)
+
+### 공지사항 관리
+
+- 공지사항 리스트에 DataTables 적용: 검색 + 페이징
+- 클릭 시 상세 내용 모달 출력  
+- 백엔드(Redis) 1분 캐싱
 
 ### 방문차량 예약 및 입차
 
@@ -49,24 +82,11 @@
 - GCS 연동 후 이미지 경로 DB 저장  
 - 로그인 세션을 통해 사용자 아파트 동호수를 자동으로 식별 및 매핑
 
-### 유지보수 일정 캘린더
+### 주요 일정 캘린더
 
 - 월별 일정 렌더링 및 날짜 클릭 시 상세 모달 표시
 - 프론트(JavaScript) 1분 캐싱 + 백엔드(Redis) 1분 캐싱
 - 사용자의 반복 요청에 따른 트래픽 최소화
-
-### 공지사항 관리
-
-- 공지사항 리스트에 DataTables 적용: 검색 + 페이징
-- 클릭 시 상세 내용 모달 출력  
-- 백엔드(Redis) 1분 캐싱
-
-### 사용자 맞춤형 대시보드
-
-- 로그인한 사용자의 아파트 번호 기준으로 필터링된 콘텐츠 제공
-- 공지사항, 수리 요청, 차량 예약, 일정 등 요약 제공
-- 날씨, 미세먼지 API(OpenWeatherMap + AirVisual) 연동
-- 실시간 시계 표시 (setInterval 기반)
 
 ---
 
@@ -93,26 +113,34 @@
 
 ## 인증 및 보안 처리
 
-- 비밀번호 BCrypt 암호화  
-- JWT 기반 이메일 인증 및 재설정 링크 (10분 유효)  
-- 세션 기반 사용자 인증 (수동 인증처리 방식 적용)
-- Redis 세션 저장소 활용해 이중 로그인 차단 구현
+- 프로젝트 초기에는 로그인부터 세션 설정까지 모두 수동 인증 방식으로 구현  
+- 이후 보안성과 확장성 강화를 위해 Spring Security를 점진적으로 도입  
+  (로그인 처리, CSRF 방지, Remember-Me 기능 등 적용)
+- 현재는 수동 인증 로직을 제거하고, Spring Security + Redis 기반 세션 인증 구조로 안정화  
+- Redis 세션 저장소를 활용해 이중 로그인 차단 구현  
 - Spring Security를 통해 접속 경로 제어 및 접근 권한 관리
 
 ---
 
-
 ## Redis 기반 세션 관리 및 캐싱 처리
 
 - **세션 저장소로 Redis 사용**
-  - Spring Session + Redis 연동 (`@EnableRedisHttpSession`)
-  - 세션 유효 시간: 30분 설정 (`maxInactiveIntervalInSeconds = 1800`)
-  - 이중 로그인 차단 구현: 동일 아이디 로그인 시 기존 세션을 Redis에서 조회 후 강제 삭제
-  - 다중 사용자 환경에서도 안정적인 세션 처리 가능
+  - Spring Security + Spring Session + Redis 연동 (`@EnableRedisHttpSession`)
+  - 인증 정보는 `SecurityContext`에 저장되며, Redis에 자동으로 세션 저장
+  - 동일 계정으로 로그인 시 기존 세션을 Redis에서 조회 후 강제 삭제하여 이중 로그인 차단 구현
+  - `SecurityContextHolder.getContext().getAuthentication().getName()` 방식으로 인증된 사용자 식별
+  - 다중 사용자 환경에서도 안정적인 인증/세션 관리 가능
 
 - **공지사항 / 유지보수 일정 캐싱 처리**
   - `@Cacheable("notices")`, `@Cacheable("maintenanceSchedules")` 적용
   - 프론트엔드에서도 유지보수 일정은 JS 레벨에서 1분 캐싱하여 재호출 방지
+
+---
+
+- **테스트 코드 기반 검증**  
+  - `AuthService`의 이메일 인증 로직에 대해 `JUnit5 + Mockito` 기반 단위 테스트 작성
+  - 실제 메일 발송 대신 `JavaMailSender`를 Mock 처리하여 외부 의존 없이 검증
+  - 테스트 클래스: `src/test/java/com/wallpad/project/service/AuthServiceTest.java`
 
 ---
 
@@ -219,18 +247,27 @@ spring.datasource.password=본인_비밀번호
   효율적으로 처리하는 데 역할할 것으로 기대하였습니다. 그 결과 사용자 경험과 서버 성능을 동시에 확보할 수 있었습니다.
 
 
-- **이중 로그인 문제 → Redis 세션 연동을 통한 중복 세션 제거**
-  보다 유연한 컨트롤과 세션 기반 사용자 상태 관리를 직접 구현하고자, Spring Security의 자동 인증 체계 대신 사용자 인증부터 로그인 처리까지 수동으로 설계하였습니다.
-  이 과정에서 @PostMapping("/login") 메서드를 통해 로그인 로직을 직접 구현했습니다. 그러나 이러한 구조에서는 formLogin(), sessionManagement().maximumSessions(1)과 같은 
-  Spring Security의 자동 이중 로그인 방지 기능을 사용할 수 없는 제약이 있었습니다. 이로 인해 동일 계정의 중복 로그인을 허용하게 되는 보안 이슈가 발생하였고, 
-  이를 해결할 커스텀 방식이 필요했습니다.
+- **인증 구조의 변화: 수동 인증에서 Spring Security 기반으로**
 
-  1. **Spring Session + Redis 연동**
-     세션 저장소를 기본 메모리에서 Redis로 교체하여 모든 사용자 세션을 중앙에서 관리할 수 있도록 구성하였습니다.
+  프로젝트 초기에 저는 로그인, 인증, 세션 관리 전반을 직접 제어하고자 Spring Security의 자동 인증 체계 대신, 수동 인증 방식을 도입했습니다.
+  @PostMapping("/login") 방식으로 로그인 로직을 직접 작성하고, 세션 저장, 쿠키 설정, 이중 로그인 제어 등의 흐름을 전부 수동으로 설계했습니다.
+  "보안은 단순히 설정값이 아니라, 직접 설계할 수 있어야 한다." 이 철학을 바탕으로 인증 흐름을 처음부터 끝까지 직접 구현해보고자 했습니다.
 
-  2. **사용자 ID 기반 세션 조회 및 제거**
-     로그인 시 FindByIndexNameSessionRepository를 활용하여 해당 사용자(username)의 기존 세션들을 Redis에서 전부 조회하고,
-     현재 세션을 제외한 나머지 세션을 deleteById()로 삭제하는 로직을 추가하였습니다.
+  하지만 프로젝트가 발전하고 보안 요구가 늘어날수록, 다음과 같은 한계에 부딪혔습니다:
+
+  ⚠️ 한계점
+
+  ❌ CSRF 방어 미비 : 수동 인증 구조에서는 Spring Security의 기본 방어 기능을 활용할 수 없음
+  ❌ 쿠키/세션 보안 설정 어려움	: HttpOnly, Secure, SameSite 등의 설정을 매번 직접 처리해야 함
+  ❌ 이중 로그인 방지 기능 부족	: sessionManagement().maximumSessions(1) 같은 자동 제어 불가
+  ❌ 유지보수 어려움	: 인증 로직을 매번 직접 작성해야 하며 확장에 불리함
+  
+  🔄 점진적인 구조 전환: 수동 인증 → Spring Security + 커스텀 제어 방식
+
+  ✅ CSRF 방어 적용 : Spring Security의 기본 설정을 활성화하여 CSRF 공격을 차단했습니다.
+  ✅ 수동 쿠키 기반 Remember-Me : AuthenticationSuccessHandler를 통해 사용자가 로그인 시 선택한 아이디 저장 기능을 쿠키로 직접 구현했습니다.
+  ✅ SecurityFilterChain 기반 인증 흐름 재정비 : formLogin(), logout(), sessionManagement() 등 Spring Security 설정을 활용하는 방식으로 재정비하였습니다.
+  ✅ Redis 기반 수동 이중 로그인 방지 : Spring Session과 Redis를 연동하여, 동일 사용자 로그인 시 기존 세션을 제거하는 커스텀 로직을 적용했습니다.
 
  ```java
 // Redis 기반 이중 로그인 제어 로직
@@ -241,9 +278,9 @@ for (Session s : userSessions.values()) {
   }
 }
  ```
-  그 결과, 이중 로그인 차단을 완전히 해결하여 1인 1세션 구조를 유지할 수 있었고, Spring Security 자동 기능에 의존하지 않고도 
-  보안성과 사용자 편의성을 동시에 확보할 수 있었습니다.
-
+  그 결과, 기존의 수동 인증 설계 경험을 바탕으로 Spring Security의 자동 기능을 점진적으로 도입하고 보완하면서 보안성, 확장성, 유지보수성 모두를 확보한 
+  인증 구조를 완성할 수 있었습니다. 이 과정은 단순한 기능 구현을 넘어, 프레임워크의 철학을 이해하고, 필요에 따라 유연하게 설계할 수 있는 능력을 키운 중요한 경험이었습니다.
+  
 
 - **GCS 이미지 업로드 처리 → 스토리지 최적화**
   멀티 이미지 업로드 기능에서 단순히 서버 로컬에 저장할 경우,디스크 용량 한계, 확장성 부족, 파일명 충돌 문제 등으로 인해 유지보수에 어려움이 있었습니다. 

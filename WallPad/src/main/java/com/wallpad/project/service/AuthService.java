@@ -35,6 +35,9 @@ public class AuthService {
 
 	@Value("${jwt.secret}")
 	private String secretKey;
+	
+	@Value("${app.domain}")
+	private String domain;
 
 	public boolean authenticate(String username, String password) {
 		UserDTO user = apiMapper.findUserByUsername(username);
@@ -48,7 +51,7 @@ public class AuthService {
 	public void sendVerificationEmail(String toEmail, String token) {
 		try {
 			String subject = "이메일 인증";
-			String text = "안녕하세요! 이메일 인증을 위해 아래 링크를 클릭하세요:\n" + "http://localhost:8080/verify-email?token=" + token;
+			String text = "안녕하세요! 이메일 인증을 위해 아래 링크를 클릭하세요:\n" + domain + "/verify-email?token=" + token;
 
 			MimeMessageHelper message = new MimeMessageHelper(mailSender.createMimeMessage(), true);
 			message.setFrom("wallpadtest@gmail.com");
@@ -105,7 +108,7 @@ public class AuthService {
 		resetTokenDTO.setExpireAt(LocalDateTime.now().plusMinutes(10));
 		apiMapper.updateResetToken(resetTokenDTO);
 
-		String link = "http://localhost:8080/reset-password?token=" + token;
+		String link = domain + "/reset-password?token=" + token;
 
 		try {
 			MimeMessage message = mailSender.createMimeMessage();

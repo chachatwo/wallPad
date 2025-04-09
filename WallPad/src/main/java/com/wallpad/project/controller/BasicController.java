@@ -12,8 +12,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.session.FindByIndexNameSessionRepository;
-import org.springframework.session.Session;
+//import org.springframework.session.FindByIndexNameSessionRepository;
+//import org.springframework.session.Session;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +52,13 @@ public class BasicController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	@Autowired
-	private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
+//	@Autowired
+//	private FindByIndexNameSessionRepository<? extends Session> sessionRepository;
+
+	@GetMapping("/")
+	public String home() {
+		return "redirect:/login";
+	}
 
 	@GetMapping("/signup")
 	public String signup(Model model) {
@@ -124,7 +129,7 @@ public class BasicController {
 		Cookie.setPath("/");
 		Cookie.setHttpOnly(true);
 		Cookie.setSecure(false);
-		Cookie.setDomain("localhost");
+//		Cookie.setDomain("localhost");
 		response.addCookie(Cookie);
 
 		session.invalidate();
