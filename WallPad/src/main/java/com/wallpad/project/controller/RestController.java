@@ -22,6 +22,7 @@ public class RestController {
 
 	private final ApiService apiService;
 	private final AuthService authService;
+	private final NotificationService notificationService;
 
 	@Value("${jwt.secret}")
 	private String secretKey;
@@ -93,11 +94,21 @@ public class RestController {
 	@PostMapping("/api/register/car")
 	public EntryCarDTO registerEntryCar(@RequestBody EntryCarDTO entryCarDTO) {
 		EntryCarDTO reservationInfo = apiService.findReservedCar(entryCarDTO.getCarNumber());
+
 		if (reservationInfo != null) {
 			entryCarDTO.setApartmentNumber(reservationInfo.getApartmentNumber());
 			apiService.insertEntryCar(entryCarDTO);
+
+			NotificationDTO notification = new NotificationDTO();
+			notification.setApartmentNumber(reservationInfo.getApartmentNumber());
+			notification.setMessage(entryCarDTO.getCarNumber() + " 차량이 입차하였습니다.");
+			notification.setRead(false); 
+			notificationService.saveNotification(notification);
+
 			return entryCarDTO;
 		}
+
 		return null;
 	}
+
 }

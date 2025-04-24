@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wallpad.project.mapper.NotificationMapper">
+
+	<insert id="insertNotification"
+		parameterType="com.wallpad.project.dto.NotificationDTO">
+		INSERT INTO notifications (apartmentNumber, message,
+		is_read, created_at)
+		VALUES (#{apartmentNumber}, #{message}, false,
+		NOW())
+	</insert>
+
+	<select id="selectUnreadNotifications" parameterType="string"
+		resultType="com.wallpad.project.dto.NotificationDTO">
+		SELECT * FROM notifications
+		WHERE apartmentNumber =
+		#{apartmentNumber} AND is_read = false
+		ORDER BY created_at DESC
+	</select>
+
+	<select id="countUnreadNotifications" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*) FROM notifications
+		WHERE apartmentNumber =
+		#{apartmentNumber} AND is_read = false
+	</select>
+
+	<update id="updateAllReadStatus" parameterType="string">
+		UPDATE
+		notifications SET is_read = true
+		WHERE apartmentNumber =
+		#{apartmentNumber} AND is_read = false
+	</update>
+
+	<select id="selectLatestNotifications" parameterType="string"
+		resultType="com.wallpad.project.dto.NotificationDTO">
+		SELECT * FROM notifications
+		WHERE apartmentNumber = #{apartmentNumber}
+		AND is_read = true
+		ORDER BY created_at DESC
+		LIMIT 5
+	</select>
+
+
+
+
+
+</mapper>

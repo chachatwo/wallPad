@@ -39,7 +39,7 @@ public class SecurityConfig {
         http
             .csrf().disable()  // CSRF 보호 비활성화
             .authorizeHttpRequests()
-                .antMatchers("/signup", "/login", "/find-id", "/find-password", "/reset-password", "/check-username", "/check-email", "/verify-email", "/users/insert", "/css/**", "/js/**") // 접근 허용 경로
+                .antMatchers("/signup", "/login", "/find-id", "/find-password", "/reset-password", "/check-username", "/check-email", "/verify-email", "/users/insert", "/css/**", "/js/**", "/ws/**", "/topic/**", "/app/**", "/api/notifications/read", "/queue/**") // 접근 허용 경로
                 .permitAll()  
                 .anyRequest().authenticated() 
             .and()

@@ -81,6 +81,8 @@
 		</div>
 		<!-- 3열 -->
 		<div class="column column-right">
+
+			<!-- 🔷 버튼 카드 위젯 -->
 			<div class="dashboard-widget button-widget">
 				<button class="action-button"
 					onclick="window.location.href='/notices'">공지사항</button>
@@ -91,9 +93,34 @@
 				<button class="action-button"
 					onclick="window.location.href='/parking'">주차관제</button>
 			</div>
+
+			<div class="dashboard-widget notification-widget-horizontal">
+
+				<div class="notification-horizontal">
+					<!-- 최신 알림 -->
+					<div class="latest-column">
+						<h2 class="head2">최신 알림</h2>
+						<ul id="latestNotificationList" class="latest-notification-list"></ul>
+					</div>
+
+					<!-- 안 읽은 알림 -->
+					<div class="unread-column">
+						<h2 class="head2">안 읽은 알림</h2>
+						<div class="notification-icon-box">
+							<button id="notificationIcon" onclick="toggleNotificationList()">
+								🔔 <span id="notificationCount">0</span>
+							</button>
+							<div id="notificationList" class="notification-list"
+								style="display: none;">
+								<ul id="notificationItems" class="list-group"></ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
 		</div>
 	</div>
-
 	<div>
 		<footer class="sticky-footer bg-white">
 			<div class="container my-auto footer-container">
@@ -110,7 +137,10 @@
 
 
 
-
+	<script
+		src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="js/dashboard.js"></script>
 	<script
@@ -135,6 +165,6 @@
 		</div>
 	</div>
 
-
+	<script src="js/notification.js"></script>
 </body>
 </html>
